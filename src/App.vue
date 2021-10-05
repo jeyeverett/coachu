@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import TheHeader from './components/UI/TheHeader';
+import TheHeader from './components/layout/TheHeader';
 export default {
   components: {
     TheHeader
@@ -16,6 +16,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'src/variables.scss';
+
 *,
 *::before,
 *::after {
@@ -40,8 +42,9 @@ li {
 a {
   text-decoration: none;
   color: blue;
+  font-size: 1.4rem;
   &:hover {
-    color: red;
+    color: $color-secondary;
   }
 }
 </style>

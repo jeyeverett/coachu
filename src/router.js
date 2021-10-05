@@ -25,12 +25,12 @@ const router = createRouter({
               component: CoachContact
             }
           ]
-        },
-        {
-          path: 'register',
-          component: CoachReg
         }
       ]
+    },
+    {
+      path: '/register',
+      component: CoachReg
     },
     {
       path: '/requests',
