@@ -17,10 +17,12 @@ const router = createRouter({
       component: CoachList,
       children: [
         {
+          name: 'coach',
           path: ':coachId',
           component: CoachDetails,
           children: [
             {
+              name: 'contact',
               path: 'contact',
               component: CoachContact
             }

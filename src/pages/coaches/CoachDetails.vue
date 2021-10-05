@@ -1,5 +1,12 @@
 <template>
-  <h1>Coach Details</h1>
-  <router-view></router-view>
-  <router-link :to="this.$route.path + '/contact'">Contact</router-link>
+  <section>
+    <h1>Coach Details</h1>
+    <router-view></router-view>
+  </section>
 </template>
+
+<style lang="scss" scoped>
+section {
+  border: 1px solid black;
+}
+</style>

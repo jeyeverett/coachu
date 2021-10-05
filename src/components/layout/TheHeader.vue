@@ -17,6 +17,8 @@
 </template>
 
 <style lang="scss" scoped>
+@import 'src/variables.scss';
+
 header {
   padding: 2rem 4rem;
 }
@@ -40,7 +42,12 @@ li {
 
 a.router-link-active {
   padding-bottom: 1rem;
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid $color-primary;
+  transition: $transition-all;
+
+  &:hover {
+    border-bottom: 2px solid $color-primary-dark;
+  }
 }
 
 .logo {
