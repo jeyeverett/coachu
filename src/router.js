@@ -20,11 +20,13 @@ const router = createRouter({
           name: 'coach',
           path: ':coachId',
           component: CoachDetails,
+          props: true,
           children: [
             {
               name: 'contact',
               path: 'contact',
-              component: CoachContact
+              component: CoachContact,
+              props: true
             }
           ]
         }
@@ -43,7 +45,11 @@ const router = createRouter({
       component: NotFound
     }
   ],
-  history: createWebHistory()
+  history: createWebHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    return { top: 0, left: 0 };
+  }
 });
 
 export default router;

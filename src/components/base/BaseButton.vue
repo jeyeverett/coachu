@@ -25,7 +25,7 @@ a {
   background-color: transparent;
   padding: 1rem 2rem;
   border: 1px solid $color-primary;
-  border-radius: 3px;
+  border-radius: calc($border-radius - 2px);
   cursor: pointer;
   text-align: center;
   transition: $transition-all;
@@ -42,6 +42,8 @@ a {
   background-color: rgba($color-primary, 0.6);
 }
 
-.outline {
+.register {
+  background-color: $color-primary-dark;
+  color: white;
 }
 </style>

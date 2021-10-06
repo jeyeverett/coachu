@@ -1,13 +1,13 @@
 <template>
   <base-card>
     <li>
-      <section>
+      <article>
         <h3>{{ fullName }}</h3>
         <h4>${{ hourlyRate }}/hour</h4>
         <div class="badges">
           <base-badge v-for="area in areas" :key="area">{{ area }}</base-badge>
         </div>
-      </section>
+      </article>
       <div class="actions">
         <base-button :to="detailsLink" style="marginBottom: 1rem;" :link="true">
           View Details
@@ -40,7 +40,6 @@ export default {
 <style lang="scss" scoped>
 li {
   width: 100%;
-  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

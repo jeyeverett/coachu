@@ -16,6 +16,8 @@
   align-items: center;
   margin: 1rem;
   width: 100%;
-  max-width: 60rem;
+  height: 100%;
+  padding: 2rem;
+  max-width: 80rem;
 }
 </style>

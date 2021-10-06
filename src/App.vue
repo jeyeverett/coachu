@@ -1,7 +1,6 @@
 <template>
   <the-header></the-header>
   <main>
-    <h1 style="fontSize: 3rem;">coachu</h1>
     <router-view></router-view>
   </main>
 </template>
@@ -29,6 +28,7 @@ export default {
 html {
   font-size: 62.5%;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -40,6 +40,10 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+section {
+  width: 100%;
 }
 
 li {
