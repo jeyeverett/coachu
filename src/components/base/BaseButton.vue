@@ -19,6 +19,7 @@ export default {
 button,
 a {
   font-size: 1.4rem;
+  line-height: 1.4rem;
   color: $color-black;
   font-family: inherit;
   border: none;
@@ -45,5 +46,9 @@ a {
 .register {
   background-color: $color-primary-dark;
   color: white;
+  &:hover {
+    background-color: $color-primary;
+    color: white;
+  }
 }
 </style>

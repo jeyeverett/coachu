@@ -3,18 +3,18 @@
   <section class="details">
     <router-view />
   </section>
-  <section class="actions" v-show="showFilters">
-    <coach-filter @change-filter="setFilters" />
-  </section>
   <section>
     <div class="actions">
       <base-button mode="ghost" style="marginRight: 1rem;">Refresh</base-button>
       <base-button style="marginRight: 1rem;" @click="toggleFilters"
         >Filters</base-button
       >
-      <base-button to="/register" :link="true" mode="register"
+      <base-button to="/register" :link="true" mode="register" v-if="!isCoach"
         >Register</base-button
       >
+    </div>
+    <div class="actions" v-show="showFilters">
+      <coach-filter @change-filter="setFilters" />
     </div>
     <ul v-if="hasCoaches">
       <coach-item
@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('coaches', ['getCoaches', 'hasCoaches']),
+    ...mapGetters('coaches', ['getCoaches', 'hasCoaches', 'isCoach']),
     filteredCoaches() {
       return this.getCoaches.filter(coach => {
         if (coach.areas.includes('frontend') && this.activeFilters.frontend) {

@@ -3,15 +3,15 @@
     <section>
       <h2>Find By Specialty</h2>
       <div>
-        <span class="filter-option">
+        <span>
           <label for="frontend">Frontend</label>
           <input type="checkbox" id="frontend" checked @click="setFilters" />
         </span>
-        <span class="filter-option">
+        <span>
           <label for="backend">Backend</label>
           <input type="checkbox" id="backend" checked @click="setFilters" />
         </span>
-        <span class="filter-option">
+        <span>
           <label for="career">Career</label>
           <input type="checkbox" id="career" checked @click="setFilters" />
         </span>

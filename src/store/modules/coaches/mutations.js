@@ -1,5 +1,7 @@
 export default {
   addCoach(state, payload) {
-    this.coaches.push(payload.coach);
+    console.log(payload);
+    state.coaches.push(payload);
+    console.log(state);
   }
 };
