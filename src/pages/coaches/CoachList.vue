@@ -3,32 +3,43 @@
   <section class="details">
     <router-view />
   </section>
+
   <section>
     <div class="actions">
-      <base-button mode="ghost" style="marginRight: 1rem;">Refresh</base-button>
+      <base-button mode="ghost" style="marginRight: 1rem;" @click="loadCoaches"
+        >Refresh</base-button
+      >
       <base-button style="marginRight: 1rem;" @click="toggleFilters"
         >Filters</base-button
       >
-      <base-button to="/register" :link="true" mode="register" v-if="!isCoach"
+      <base-button
+        to="/register"
+        :link="true"
+        mode="register"
+        v-if="!isLoading && !isCoach"
         >Register</base-button
       >
     </div>
     <div class="actions" v-show="showFilters">
       <coach-filter @change-filter="setFilters" />
     </div>
-    <ul v-if="hasCoaches">
+    <div v-if="isLoading">
+      <base-spinner />
+    </div>
+    <ul v-else-if="hasCoaches">
       <coach-item
         v-for="coach in filteredCoaches"
         :key="coach.id"
         v-bind="coach"
       />
     </ul>
-    <h3 v-else>No coaches found.</h3>
+    <h3 v-else-if="!isError">No coaches found.</h3>
+    <div class="error" v-if="isError">{{ isError }}</div>
   </section>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import CoachItem from '../../components/coaches/CoachItem.vue';
 import CoachFilter from '../../components/coaches/CoachFilter.vue';
 
@@ -49,6 +60,7 @@ export default {
   },
   computed: {
     ...mapGetters('coaches', ['getCoaches', 'hasCoaches', 'isCoach']),
+    ...mapGetters(['isLoading', 'isError']),
     filteredCoaches() {
       return this.getCoaches.filter(coach => {
         if (coach.areas.includes('frontend') && this.activeFilters.frontend) {
@@ -68,6 +80,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['loadCoaches']),
     setFilters(newFilters) {
       this.activeFilters = newFilters;
     },

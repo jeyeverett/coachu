@@ -1,17 +1,59 @@
 <template>
-  <base-card v-if="!isLoading" style="display: flex; flex-direction: column;">
-    <h2>Contact {{ fullName }}</h2>
-    <form>
+  <div v-if="isLoading">
+    <base-spinner />
+  </div>
+  <base-card v-else style="display: flex; flex-direction: column;">
+    <header>
+      <h2>Contact {{ fullName }}</h2>
+    </header>
+    <transition>
+      <h3 v-if="sentMessage">Message Sent!</h3>
+    </transition>
+    <form @submit.prevent="sendMessage">
       <div class="form-control">
         <label for="email">Your e-mail</label>
-        <input type="email" id="email" />
+        <input
+          type="email"
+          id="email"
+          v-model="email"
+          :class="{ invalid: invalid.email }"
+          @input="validate"
+        />
+        <transition>
+          <span
+            class="invalid-arrow"
+            id="invalid-checkbox"
+            v-show="invalid.email"
+            >&#8594;</span
+          >
+        </transition>
       </div>
       <div class="form-control">
         <label for="message">Message</label>
-        <textarea id="message" rows="5"></textarea>
+        <textarea
+          id="message"
+          rows="5"
+          v-model="message"
+          :class="{ invalid: invalid.message }"
+          @input="validate"
+        />
+        <transition>
+          <span
+            class="invalid-arrow"
+            id="invalid-checkbox"
+            v-show="invalid.message"
+            >&#8594;</span
+          >
+        </transition>
       </div>
-      <div class="actons">
-        <base-button>Send Message</base-button>
+      <div>
+        <base-button
+          :disabled="!isValid"
+          class="register"
+          :class="isValid ? 'valid' : 'invalid'"
+        >
+          Send Message
+        </base-button>
       </div>
     </form>
     <section style="textAlign: right; margin: 2rem;">
@@ -23,41 +65,88 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   props: ['coachId'],
   data() {
     return {
-      coach: null,
-      isLoading: false
+      email: '',
+      message: '',
+      invalid: {
+        email: false,
+        message: false
+      },
+      sentMessage: false
     };
   },
   computed: {
+    ...mapGetters('coaches', ['getCoaches']),
+    ...mapGetters(['isLoading', 'isError']),
+    getCoach() {
+      return this.getCoaches.find(coach => coach.id === this.coachId);
+    },
     fullName() {
-      return this.coach.firstName + ' ' + this.coach.lastName;
+      return this.getCoach.firstName + ' ' + this.getCoach.lastName;
     },
     detailsLink() {
       return { name: 'coach', params: { coachId: this.coachId } };
+    },
+    isValid() {
+      return !Object.values(this.invalid).includes(true);
+    },
+    isLoading() {
+      return this.$store.state.isLoading;
     }
   },
   methods: {
-    ...mapActions('coaches', ['getCoach']),
-    loadCoach(id) {
-      this.isLoading = true;
-      this.getCoach({ coachId: id }).then(coach => {
-        this.coach = coach;
-        this.isLoading = false;
+    ...mapActions('requests', ['sendRequest']),
+    validate({ target: { id, value } }) {
+      if (id === 'email' && (!value.includes('@') || !value.includes('.'))) {
+        this.invalid[id] = true;
+        return;
+      }
+
+      if (value === '') {
+        this.invalid[id] = true;
+      } else {
+        this.invalid[id] = false;
+      }
+    },
+    sendMessage() {
+      if (this.email === '' || this.message === '') return;
+
+      this.sendRequest({
+        coachId: this.coachId,
+        email: this.email,
+        message: this.message
       });
+
+      this.sentMessage = true;
+
+      setTimeout(() => {
+        this.email = '';
+        this.message = '';
+        this.sentMessage = false;
+        this.invalid.email = true;
+        this.invalid.message = true;
+      }, 2000);
     }
   },
   created() {
-    this.loadCoach(this.coachId);
-  },
-  watch: {
-    coachId(newCoachId) {
-      this.loadCoach(newCoachId);
-    }
+    setTimeout(
+      () =>
+        (this.invalid = {
+          email: true,
+          message: true
+        }),
+      300
+    );
   }
+  // watch: {
+  //   coachId() {
+  //     this.loadCoaches();
+  //   }
+  // }
 };
 </script>
 
@@ -67,6 +156,7 @@ export default {
 form {
   width: 70%;
   min-width: 50rem;
+
   .form-control {
     margin: 1rem 0;
     position: relative;
@@ -88,6 +178,46 @@ form {
       font-size: 1.4rem;
       font-weight: bold;
     }
+    input.invalid,
+    textarea.invalid {
+      border-bottom: 2px solid orangered;
+    }
+  }
+
+  .invalid-arrow {
+    font-size: 3rem;
+    line-height: 3rem;
+    position: absolute;
+    left: -3rem;
+    color: orangered;
+  }
+
+  button.invalid {
+    background-color: $color-primary-light;
+  }
+
+  button.valid {
+    background-color: $color-primary-dark;
+  }
+}
+
+.v-enter-active {
+  animation: errow 0.2s ease-out forwards;
+}
+
+.v-leave-active {
+  animation: errow 0.2s ease-out reverse;
+}
+
+@keyframes errow {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 </style>

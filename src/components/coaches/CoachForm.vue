@@ -1,6 +1,6 @@
 <template>
   <base-card>
-    <form @submit.prevent="registerCoach">
+    <form @submit.prevent="addCoach">
       <div class="form-control">
         <label for="firstName">First Name</label>
         <input
@@ -113,11 +113,11 @@ export default {
   data() {
     return {
       invalid: {
-        firstName: true,
-        lastName: true,
-        description: true,
-        hourlyRate: true,
-        specialty: true
+        firstName: false,
+        lastName: false,
+        description: false,
+        hourlyRate: false,
+        specialty: false
       },
       coach: {
         firstName: '',
@@ -135,11 +135,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('coaches', ['addCoach']),
-    registerCoach() {
-      this.addCoach({ coach: { ...this.coach, id: this.userId } });
-      this.$router.replace('/coaches/' + this.userId);
-    },
+    ...mapActions('coaches', ['registerCoach']),
     validate({ target: { id, value } }) {
       if (id === 'hourlyRate') {
         this.invalid[id] = value < 1;
@@ -151,6 +147,10 @@ export default {
       } else {
         this.invalid[id] = false;
       }
+    },
+    addCoach() {
+      this.registerCoach({ coach: this.coach });
+      this.$router.replace('/coaches/' + this.userId);
     }
   },
   watch: {
@@ -161,6 +161,19 @@ export default {
         this.invalid.specialty = true;
       }
     }
+  },
+  created() {
+    setTimeout(
+      () =>
+        (this.invalid = {
+          firstName: true,
+          lastName: true,
+          description: true,
+          hourlyRate: true,
+          specialty: true
+        }),
+      300
+    );
   }
 };
 </script>
@@ -241,32 +254,24 @@ form {
     }
   }
 
-  .v-enter-from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-
   .v-enter-active {
-    transition: all 0.2s ease-out;
-  }
-
-  .v-enter-to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .v-leave-from {
-    opacity: 1;
-    transform: translateX(0);
+    animation: errow 0.2s ease-out forwards;
   }
 
   .v-leave-active {
-    transition: all 0.2s ease-out;
+    animation: errow 0.2s ease-out reverse;
   }
 
-  .v-leave-to {
-    opacity: 0;
-    transform: translateX(-30px);
+  @keyframes errow {
+    0% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   button.invalid {

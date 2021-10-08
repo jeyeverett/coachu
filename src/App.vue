@@ -7,9 +7,16 @@
 
 <script>
 import TheHeader from './components/layout/TheHeader';
+import { mapActions } from 'vuex';
 export default {
   components: {
     TheHeader
+  },
+  methods: {
+    ...mapActions(['loadCoaches'])
+  },
+  created() {
+    this.loadCoaches();
   }
 };
 </script>
@@ -77,5 +84,12 @@ h3 {
 h4 {
   font-size: 1.4rem;
   margin-bottom: 0.8rem;
+}
+
+.error {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-top: 10rem;
 }
 </style>

@@ -1,6 +1,9 @@
 <template>
-  <router-view v-if="this.$route.path.includes('contact')"></router-view>
-  <base-card v-else-if="!isLoading">
+  <router-view v-if="this.$route.path.includes('contact')" />
+  <div v-else-if="isLoading">
+    <base-spinner />
+  </div>
+  <base-card v-else>
     <section class="coach-details">
       <h2>{{ fullName }}</h2>
       <p class="coach-details__description">{{ description }}</p>
@@ -19,50 +22,61 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   props: ['coachId'],
-  data() {
-    return {
-      coach: null,
-      isLoading: false
-    };
-  },
+  // data() {
+  //   return {
+  //     isLoading: true
+  //   };
+  // },
   computed: {
+    ...mapGetters('coaches', ['getCoaches']),
+    getCoach() {
+      return this.getCoaches.find(coach => coach.id === this.coachId);
+    },
     fullName() {
-      return this.coach.firstName + ' ' + this.coach.lastName;
+      return this.getCoach.firstName + ' ' + this.getCoach.lastName;
     },
     contactLink() {
       return { name: 'contact', params: { coachId: this.coachId } };
     },
     description() {
-      return this.coach.description;
+      return this.getCoach.description;
     },
     areas() {
-      return this.coach.areas;
+      return this.getCoach.areas;
     },
     rate() {
-      return this.coach.hourlyRate;
-    }
-  },
-  methods: {
-    ...mapActions('coaches', ['getCoach']),
-    loadCoach(id) {
-      this.isLoading = true;
-      this.getCoach({ coachId: id }).then(coach => {
-        this.coach = coach;
-        this.isLoading = false;
-      });
-    }
-  },
-  created() {
-    this.loadCoach(this.coachId);
-  },
-  watch: {
-    coachId(newCoachId) {
-      this.loadCoach(newCoachId);
+      return this.getCoach.hourlyRate;
+    },
+    isLoading() {
+      return this.$store.state.isLoading;
     }
   }
+  // methods: {
+  //   ...mapActions('coaches', ['fetchCoaches']),
+  //   loadCoaches() {
+  //     this.isLoading = true;
+  //     this.error = null;
+  //     this.fetchCoaches()
+  //       .then(() => {
+  //         this.isLoading = false;
+  //       })
+  //       .catch(() => {
+  //         this.isLoading = false;
+  //         this.error = 'Network Error - please try again later.';
+  //       });
+  //   }
+  // },
+  // created() {
+  //   this.loadCoaches();
+  // },
+  // watch: {
+  //   coachId() {
+  //     this.loadCoaches();
+  //   }
+  // }
 };
 </script>
 
