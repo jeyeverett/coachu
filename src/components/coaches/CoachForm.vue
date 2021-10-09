@@ -4,11 +4,11 @@
       <div class="form-control">
         <label for="firstName">First Name</label>
         <input
-          id="firstName"
           type="text"
+          id="firstName"
           v-model.trim="coach.firstName"
-          @input="validate"
           :class="{ invalid: invalid.firstName }"
+          @input="validate"
         />
         <transition>
           <span class="invalid-arrow" v-show="invalid.firstName">&#8594;</span>
@@ -17,11 +17,11 @@
       <div class="form-control">
         <label for="lastName">Last Name</label>
         <input
-          id="lastName"
           type="text"
+          id="lastName"
           v-model.trim="coach.lastName"
-          @input="validate"
           :class="{ invalid: invalid.lastName }"
+          @input="validate"
         />
         <transition>
           <span class="invalid-arrow" v-show="invalid.lastName">&#8594;</span>
@@ -97,9 +97,9 @@
       </div>
       <base-button
         style="marginTop: 2rem; width: 100%;"
-        :disabled="!isValid"
+        :disabled="!enableButton"
         class="register"
-        :class="isValid ? 'valid' : 'invalid'"
+        :class="enableButton ? 'valid' : 'invalid'"
       >
         Register
       </base-button>
@@ -125,14 +125,12 @@ export default {
         areas: [],
         description: '',
         hourlyRate: null
-      }
+      },
+      enableButton: false
     };
   },
   computed: {
-    ...mapGetters(['userId']),
-    isValid() {
-      return !Object.values(this.invalid).includes(true);
-    }
+    ...mapGetters(['userId'])
   },
   methods: {
     ...mapActions('coaches', ['registerCoach']),
@@ -142,11 +140,7 @@ export default {
         return;
       }
 
-      if (value === '') {
-        this.invalid[id] = true;
-      } else {
-        this.invalid[id] = false;
-      }
+      this.invalid[id] = value === '';
     },
     addCoach() {
       this.registerCoach({ coach: this.coach });
@@ -154,12 +148,14 @@ export default {
     }
   },
   watch: {
+    invalid: {
+      handler: function(val) {
+        this.enableButton = !Object.values(val).includes(true);
+      },
+      deep: true
+    },
     'coach.areas'(value) {
-      if (value.length) {
-        this.invalid.specialty = false;
-      } else {
-        this.invalid.specialty = true;
-      }
+      this.invalid.specialty = !value.length;
     }
   },
   created() {
@@ -206,6 +202,7 @@ form {
 
     textarea {
       resize: none;
+      font-family: inherit;
     }
 
     label {
@@ -239,7 +236,7 @@ form {
 
     input.invalid,
     textarea.invalid {
-      border-bottom: 2px solid orangered;
+      border-bottom: 2px solid $color-error;
     }
   }
 
@@ -248,7 +245,7 @@ form {
     line-height: 3rem;
     position: absolute;
     left: -3rem;
-    color: orangered;
+    color: $color-error;
     &#invalid-checkbox {
       top: -0.75rem;
     }

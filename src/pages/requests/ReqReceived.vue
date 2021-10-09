@@ -5,7 +5,7 @@
   <div v-if="isLoading">
     <base-spinner />
   </div>
-  <section v-else-if="hasRequests && !isLoading">
+  <section v-else-if="!isLoading">
     <ul>
       <request-item
         v-for="request in getRequests"
@@ -35,18 +35,15 @@ export default {
   methods: {
     ...mapActions('requests', ['fetchRequests']),
     ...mapActions(['loadingStart', 'loadingFinish', 'loadingError']),
-    loadRequests() {
+    async loadRequests() {
       this.loadingStart();
-      this.fetchRequests()
-        .then(() => {
-          this.loadingFinish();
-        })
-        .catch(() => {
-          this.loadingError(
-            'Failed to load requests - please try again later.'
-          );
-          this.loadingFinish();
-        });
+      try {
+        await this.fetchRequests();
+        this.loadingFinish();
+      } catch (err) {
+        this.loadingError('Failed to load requests - please try again later.');
+        this.loadingFinish();
+      }
     }
   },
   created() {

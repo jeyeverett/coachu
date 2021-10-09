@@ -48,9 +48,9 @@
       </div>
       <div>
         <base-button
-          :disabled="!isValid"
+          :disabled="!enableButton"
           class="register"
-          :class="isValid ? 'valid' : 'invalid'"
+          :class="enableButton ? 'valid' : 'invalid'"
         >
           Send Message
         </base-button>
@@ -76,7 +76,8 @@ export default {
         email: false,
         message: false
       },
-      sentMessage: false
+      sentMessage: false,
+      enableButton: false
     };
   },
   computed: {
@@ -90,12 +91,6 @@ export default {
     },
     detailsLink() {
       return { name: 'coach', params: { coachId: this.coachId } };
-    },
-    isValid() {
-      return !Object.values(this.invalid).includes(true);
-    },
-    isLoading() {
-      return this.$store.state.isLoading;
     }
   },
   methods: {
@@ -106,11 +101,7 @@ export default {
         return;
       }
 
-      if (value === '') {
-        this.invalid[id] = true;
-      } else {
-        this.invalid[id] = false;
-      }
+      this.invalid[id] = value === '';
     },
     sendMessage() {
       if (this.email === '' || this.message === '') return;
@@ -141,12 +132,15 @@ export default {
         }),
       300
     );
+  },
+  watch: {
+    invalid: {
+      handler: function(val) {
+        this.enableButton = !Object.values(val).includes(true);
+      },
+      deep: true
+    }
   }
-  // watch: {
-  //   coachId() {
-  //     this.loadCoaches();
-  //   }
-  // }
 };
 </script>
 
@@ -180,7 +174,7 @@ form {
     }
     input.invalid,
     textarea.invalid {
-      border-bottom: 2px solid orangered;
+      border-bottom: 2px solid $color-error;
     }
   }
 
@@ -189,7 +183,7 @@ form {
     line-height: 3rem;
     position: absolute;
     left: -3rem;
-    color: orangered;
+    color: $color-error;
   }
 
   button.invalid {

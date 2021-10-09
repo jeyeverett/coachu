@@ -26,11 +26,13 @@ export default {
   async fetchRequests(context) {
     const { userId } = context.rootGetters;
     const response = await fetch(
-      `https://coachu-71b4b-default-rtdb.firebaseio.com/requests/${userId}`
+      `https://coachu-71b4b-default-rtdb.firebaseio.com/requests/${userId}.json`
     );
 
     if (!response.ok) {
-      const error = new Error('Network error - Failed to retrieve requests.');
+      const error = new Error(
+        response.message || 'Network error - Failed to retrieve requests.'
+      );
       throw error;
     }
 

@@ -8,6 +8,7 @@
 <script>
 import TheHeader from './components/layout/TheHeader';
 import { mapActions } from 'vuex';
+
 export default {
   components: {
     TheHeader
