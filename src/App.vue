@@ -1,7 +1,11 @@
 <template>
   <the-header></the-header>
   <main>
-    <router-view></router-view>
+    <router-view v-slot="slotProps">
+      <transition name="route" mode="out-in">
+        <component :is="slotProps.Component"></component>
+      </transition>
+    </router-view>
   </main>
 </template>
 
@@ -92,5 +96,12 @@ h4 {
   font-size: 3rem;
   font-weight: bold;
   margin-top: 10rem;
+}
+
+.route-enter-active {
+  animation: errow 0.3s ease-in forwards;
+}
+.route-leave-active {
+  animation: errow 0.3s ease-in reverse;
 }
 </style>

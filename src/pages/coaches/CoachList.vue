@@ -1,43 +1,52 @@
 <template>
-  <h1>The Coaches Page</h1>
-  <section class="details">
-    <router-view />
-  </section>
-
   <section>
-    <div class="actions">
-      <base-button
-        mode="ghost"
-        style="marginRight: 1rem;"
-        @click="loadCoaches({ refresh: true })"
-        >Refresh</base-button
-      >
-      <base-button style="marginRight: 1rem;" @click="toggleFilters"
-        >Filters</base-button
-      >
-      <base-button
-        to="/register"
-        :link="true"
-        mode="register"
-        v-if="(!isCoach && !isLoading) || !isCoach"
-        >Register</base-button
-      >
-    </div>
-    <div class="actions" v-show="showFilters">
-      <coach-filter @change-filter="setFilters" />
-    </div>
-    <div v-if="isLoading">
-      <base-spinner />
-    </div>
-    <ul v-else-if="hasCoaches">
-      <coach-item
-        v-for="coach in filteredCoaches"
-        :key="coach.id"
-        v-bind="coach"
-      />
-    </ul>
-    <h3 v-else-if="!isError">No coaches found.</h3>
-    <div class="error" v-if="isError">{{ isError }}</div>
+    <h1>The Coaches Page</h1>
+
+    <section class="details">
+      <router-view v-slot="slotProps">
+        <transition name="route" mode="out-in">
+          <component :is="slotProps.Component"></component>
+        </transition>
+      </router-view>
+    </section>
+
+    <section>
+      <div class="actions">
+        <base-button
+          mode="ghost"
+          style="marginRight: 1rem;"
+          @click="loadCoaches({ refresh: true })"
+          >Refresh</base-button
+        >
+        <base-button style="marginRight: 1rem;" @click="toggleFilters"
+          >Filters</base-button
+        >
+        <base-button
+          to="/register"
+          :link="true"
+          mode="register"
+          v-if="(!isCoach && !isLoading) || !isCoach"
+          >Register</base-button
+        >
+      </div>
+      <div class="actions" v-show="showFilters">
+        <coach-filter @change-filter="setFilters" />
+      </div>
+      <div v-if="isLoading">
+        <base-spinner />
+      </div>
+      <ul v-else-if="hasCoaches">
+        <coach-item
+          v-for="coach in filteredCoaches"
+          :key="coach.id"
+          v-bind="coach"
+        />
+      </ul>
+      <h3 v-else-if="!isError">No coaches found.</h3>
+      <transition>
+        <div class="error" v-if="isError">{{ isError }}</div>
+      </transition>
+    </section>
   </section>
 </template>
 
@@ -95,8 +104,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '/src/variables.scss';
+
 h1 {
   margin-bottom: 4rem;
+  text-align: center;
 }
 ul {
   display: flex;
@@ -115,5 +127,19 @@ ul {
   justify-content: space-around;
   margin: 2rem auto;
   max-width: 100rem;
+}
+
+.v-enter-active {
+  animation: errow 0.3s ease-in forwards;
+}
+.v-leave-active {
+  animation: errow 0.3s ease-out reverse;
+}
+
+.route-enter-active {
+  animation: errow 0.3s ease-in forwards;
+}
+.route-leave-active {
+  animation: errow 0.3s ease-in reverse;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
-  <h1>Coach Registration</h1>
-  <coach-form />
+  <section>
+    <h1>Coach Registration</h1>
+    <coach-form />
+  </section>
 </template>
 
 <script>

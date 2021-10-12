@@ -196,22 +196,10 @@ form {
 }
 
 .v-enter-active {
-  animation: errow 0.2s ease-out forwards;
+  animation: errow 0.2s ease-in forwards;
 }
 
 .v-leave-active {
   animation: errow 0.2s ease-out reverse;
-}
-
-@keyframes errow {
-  0% {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 </style>

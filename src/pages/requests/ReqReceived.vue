@@ -1,23 +1,25 @@
 <template>
-  <header>
-    <h1>Requests Page</h1>
-  </header>
-  <div v-if="isLoading">
-    <base-spinner />
-  </div>
-  <section v-else-if="!isLoading">
-    <ul>
-      <request-item
-        v-for="request in getRequests"
-        :key="request.id"
-        v-bind="request"
-      />
-    </ul>
-    <base-card v-if="!isError && !hasRequests">
-      <h3>You haven't received any requests yet.</h3>
-    </base-card>
+  <section>
+    <header>
+      <h1>Requests Page</h1>
+    </header>
+    <div v-if="isLoading">
+      <base-spinner />
+    </div>
+    <section v-else-if="!isLoading">
+      <ul>
+        <request-item
+          v-for="request in getRequests"
+          :key="request.id"
+          v-bind="request"
+        />
+      </ul>
+      <base-card v-if="!isError && !hasRequests">
+        <h3>You haven't received any requests yet.</h3>
+      </base-card>
+    </section>
+    <div class="error" v-if="!isLoading && isError">{{ isError }}</div>
   </section>
-  <div class="error" v-if="!isLoading && isError">{{ isError }}</div>
 </template>
 
 <script>
