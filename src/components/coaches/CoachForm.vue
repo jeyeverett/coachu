@@ -95,14 +95,19 @@
           </transition>
         </div>
       </div>
-      <base-button
-        style="marginTop: 2rem; width: 100%;"
-        :disabled="!enableButton"
-        class="register"
-        :class="enableButton ? 'valid' : 'invalid'"
-      >
-        Register
-      </base-button>
+      <div v-if="isLoading">
+        <base-spinner />
+      </div>
+      <div v-else>
+        <base-button
+          style="marginTop: 2rem; width: 100%;"
+          :disabled="!enableButton"
+          class="register"
+          :class="enableButton ? 'valid' : 'invalid'"
+        >
+          Register
+        </base-button>
+      </div>
     </form>
   </base-card>
 </template>
@@ -130,10 +135,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userId'])
+    ...mapGetters(['userId', 'isLoading', 'isError'])
   },
   methods: {
     ...mapActions('coaches', ['registerCoach']),
+    ...mapActions(['loadingStart', 'loadingFinish', 'loadingError']),
     validate({ target: { id, value } }) {
       if (id === 'hourlyRate') {
         this.invalid[id] = value < 1;
@@ -142,9 +148,16 @@ export default {
 
       this.invalid[id] = value === '';
     },
-    addCoach() {
-      this.registerCoach({ coach: this.coach });
-      this.$router.replace('/coaches/' + this.userId);
+    async addCoach() {
+      this.loadingStart();
+      try {
+        await this.registerCoach({ coach: this.coach });
+        this.loadingFinish();
+        this.$router.replace('/coaches/' + this.userId);
+      } catch (error) {
+        this.loadingFinish();
+        this.loadingError(error);
+      }
     }
   },
   watch: {
@@ -259,24 +272,18 @@ form {
     animation: errow 0.2s ease-out reverse;
   }
 
-  @keyframes errow {
-    0% {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
   button.invalid {
     background-color: $color-primary-light;
+    color: white;
+    cursor: not-allowed;
+    &:hover {
+      background-color: $color-primary-light;
+    }
   }
 
   button.valid {
     background-color: $color-primary-dark;
+    cursor: pointer;
   }
 }
 </style>

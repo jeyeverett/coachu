@@ -25,7 +25,7 @@
           to="/register"
           :link="true"
           mode="register"
-          v-if="(!isCoach && !isLoading) || !isCoach"
+          v-if="showRegisterButton"
           >Register</base-button
         >
       </div>
@@ -43,7 +43,7 @@
         />
       </ul>
       <h3 v-else-if="!isError">No coaches found.</h3>
-      <transition>
+      <transition name="error">
         <div class="error" v-if="isError">{{ isError }}</div>
       </transition>
     </section>
@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     ...mapGetters('coaches', ['getCoaches', 'hasCoaches', 'isCoach']),
-    ...mapGetters(['isLoading', 'isError']),
+    ...mapGetters(['isLoading', 'isError', 'isLoggedIn']),
     filteredCoaches() {
       return this.getCoaches.filter(coach => {
         if (coach.areas.includes('frontend') && this.activeFilters.frontend) {
@@ -89,6 +89,12 @@ export default {
 
         return false;
       });
+    },
+    showRegisterButton() {
+      return (
+        (this.isLoggedIn && !this.isCoach && !this.isLoading) ||
+        (!this.isCoach && this.isLoggedIn)
+      );
     }
   },
   methods: {
@@ -127,19 +133,5 @@ ul {
   justify-content: space-around;
   margin: 2rem auto;
   max-width: 100rem;
-}
-
-.v-enter-active {
-  animation: errow 0.3s ease-in forwards;
-}
-.v-leave-active {
-  animation: errow 0.3s ease-out reverse;
-}
-
-.route-enter-active {
-  animation: errow 0.3s ease-in forwards;
-}
-.route-leave-active {
-  animation: errow 0.3s ease-in reverse;
 }
 </style>

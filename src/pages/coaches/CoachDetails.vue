@@ -13,7 +13,7 @@
       </div>
       <div class="coach-details__contact">
         <h3>Interested? Reach out Now!</h3>
-        <base-button :to="contactLink" mode="ghost" :link="true"
+        <base-button :to="contactLink" mode="register" :link="true"
           >Contact</base-button
         >
       </div>

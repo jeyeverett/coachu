@@ -6,12 +6,12 @@ export default {
       `https://coachu-71b4b-default-rtdb.firebaseio.com/coaches.json`
     );
 
+    const data = await response.json();
+
     if (!response.ok) {
       const error = new Error('Failed to fetch data!');
       throw error;
     }
-
-    const data = await response.json();
 
     const coaches = [];
 
@@ -23,9 +23,10 @@ export default {
     context.commit('setFetchTimestamp');
   },
   async registerCoach(context, data) {
-    const { userId } = context.rootGetters;
+    const { userId, token } = context.rootGetters;
+
     const response = await fetch(
-      `https://coachu-71b4b-default-rtdb.firebaseio.com/coaches/${userId}.json`,
+      `https://coachu-71b4b-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`,
       {
         method: 'PUT',
         body: JSON.stringify(data.coach)

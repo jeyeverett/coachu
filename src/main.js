@@ -15,6 +15,11 @@ app.component('base-card', BaseCard);
 app.component('base-badge', BaseBadge);
 app.component('base-spinner', BaseSpinner);
 
+router.afterEach((_, _2, next) => {
+  store.dispatch('loadingError', null);
+  next();
+});
+
 app.use(router);
 app.use(store);
 

@@ -8,13 +8,25 @@
         <li>
           <router-link to="/coaches">Coaches</router-link>
         </li>
-        <li>
+        <li ref="" v-if="isLoggedIn">
           <router-link to="/requests">Requests</router-link>
+        </li>
+        <li v-else>
+          <router-link to="/auth">Login</router-link>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+export default {
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 @import 'src/variables.scss';
@@ -35,7 +47,7 @@ li {
   font-size: 1.6rem;
   border-bottom: 2px solid transparent;
 
-  &:first-child {
+  &:not(:last-child) {
     margin-right: 2rem;
   }
 }

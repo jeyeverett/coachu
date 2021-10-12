@@ -9,10 +9,15 @@
         </div>
       </article>
       <div class="actions">
-        <base-button :to="detailsLink" style="marginBottom: 1rem;" :link="true">
+        <base-button
+          :to="detailsLink"
+          style="marginBottom: 1rem;"
+          :link="true"
+          @click="scrollToTop"
+        >
           View Details
         </base-button>
-        <base-button :to="contactLink" :link="true">
+        <base-button :to="contactLink" :link="true" @click="scrollToTop">
           Contact
         </base-button>
       </div>
@@ -32,6 +37,11 @@ export default {
     },
     contactLink() {
       return { name: 'contact', params: { coachId: this.id } };
+    }
+  },
+  methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0);
     }
   }
 };

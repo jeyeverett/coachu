@@ -24,10 +24,13 @@ export default {
     context.commit('addRequest', { ...newRequest, coachId, id: data.name });
   },
   async fetchRequests(context) {
-    const { userId } = context.rootGetters;
+    const { userId, token } = context.rootGetters;
+
     const response = await fetch(
-      `https://coachu-71b4b-default-rtdb.firebaseio.com/requests/${userId}.json`
+      `https://coachu-71b4b-default-rtdb.firebaseio.com/requests/${userId}.json?auth=${token}`
     );
+
+    const data = await response.json();
 
     if (!response.ok) {
       const error = new Error(
@@ -35,8 +38,6 @@ export default {
       );
       throw error;
     }
-
-    const data = await response.json();
 
     const requests = [];
 

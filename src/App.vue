@@ -98,10 +98,24 @@ h4 {
   margin-top: 10rem;
 }
 
+.inline-error {
+  font-size: 1.4rem;
+  color: $color-error;
+  text-align: center;
+  margin: 2rem 0;
+}
+
 .route-enter-active {
   animation: errow 0.3s ease-in forwards;
 }
 .route-leave-active {
   animation: errow 0.3s ease-in reverse;
+}
+
+.error-enter-active {
+  animation: errow 0.3s ease-in forwards;
+}
+.error-leave-active {
+  animation: errow 0.3s ease-out reverse;
 }
 </style>

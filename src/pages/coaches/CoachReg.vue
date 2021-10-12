@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1>Coach Registration</h1>
-    <coach-form />
+    <coach-form style="margin: 0 auto;" />
   </section>
 </template>
 
@@ -14,4 +14,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+h1 {
+  text-align: center;
+}
+</style>

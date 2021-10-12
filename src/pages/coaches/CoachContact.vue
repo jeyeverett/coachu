@@ -57,9 +57,7 @@
       </div>
     </form>
     <section style="textAlign: right; margin: 2rem;">
-      <base-button :to="detailsLink" :link="true" mode="ghost"
-        >Details</base-button
-      >
+      <base-button :to="detailsLink" :link="true">Details</base-button>
     </section>
   </base-card>
 </template>
@@ -188,10 +186,16 @@ form {
 
   button.invalid {
     background-color: $color-primary-light;
+    color: white;
+    cursor: not-allowed;
+    &:hover {
+      background-color: $color-primary-light;
+    }
   }
 
   button.valid {
     background-color: $color-primary-dark;
+    cursor: pointer;
   }
 }
 
