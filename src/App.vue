@@ -66,6 +66,8 @@ a {
   text-decoration: none;
   color: $color-primary;
   transition: $transition-all;
+  cursor: pointer;
+
   &:hover {
     color: $color-primary-dark;
   }

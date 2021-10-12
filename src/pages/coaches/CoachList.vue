@@ -28,6 +28,14 @@
           v-if="showRegisterButton"
           >Register</base-button
         >
+        <base-button
+          to="/auth?redirect=register"
+          :link="true"
+          mode="register"
+          v-else
+          title="Sign in to register as a coach"
+          >Sign-In</base-button
+        >
       </div>
       <div class="actions" v-show="showFilters">
         <coach-filter @change-filter="setFilters" />

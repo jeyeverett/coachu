@@ -99,13 +99,14 @@ export default {
       this.invalid[id] = value === '' || value.length < 6;
     },
     async submitForm({ target: { id } }) {
+      const { redirect } = this.$route.query;
       try {
         this.loadingStart();
         await this.authenticate({ user: this.user, id });
         this.user.email = '';
         this.user.password = '';
         this.loadingFinish();
-        this.$router.replace('/coaches');
+        this.$router.replace(redirect ? '/register' : '/coaches');
       } catch (error) {
         this.loadingFinish();
         this.loadingError(error);

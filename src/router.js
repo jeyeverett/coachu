@@ -7,6 +7,8 @@ import ReqReceived from './pages/requests/ReqReceived';
 import NotFound from './pages/NotFound';
 import UserAuth from './pages/auth/UserAuth';
 
+import store from './store/store';
+
 const router = createRouter({
   routes: [
     {
@@ -35,15 +37,24 @@ const router = createRouter({
     },
     {
       path: '/register',
-      component: CoachReg
+      component: CoachReg,
+      meta: {
+        auth: true
+      }
     },
     {
       path: '/auth',
-      component: UserAuth
+      component: UserAuth,
+      meta: {
+        noAuth: true
+      }
     },
     {
       path: '/requests',
-      component: ReqReceived
+      component: ReqReceived,
+      meta: {
+        auth: true
+      }
     },
     {
       path: '/:notFound(.*)',
@@ -54,6 +65,20 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     savedPosition ? savedPosition : { top: 0, left: 0 };
   }
+});
+
+router.beforeEach((to, _, next) => {
+  if (to.meta.auth && !store.getters.isLoggedIn) {
+    next('/auth');
+  } else if (to.meta.noAuth && store.getters.isLoggedIn) {
+    next('/coaches');
+  } else {
+    next();
+  }
+});
+
+router.afterEach(() => {
+  store.dispatch('loadingError', null);
 });
 
 export default router;

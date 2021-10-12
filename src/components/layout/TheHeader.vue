@@ -11,8 +11,11 @@
         <li ref="" v-if="isLoggedIn">
           <router-link to="/requests">Requests</router-link>
         </li>
+        <li ref="" v-if="isLoggedIn">
+          <a @click="logOut">Sign-Out</a>
+        </li>
         <li v-else>
-          <router-link to="/auth">Login</router-link>
+          <router-link to="/auth">Sign-In</router-link>
         </li>
       </ul>
     </nav>
@@ -20,10 +23,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapGetters(['isLoggedIn'])
+  },
+  methods: {
+    ...mapActions(['signOut']),
+    logOut() {
+      this.signOut();
+      this.$router.replace('/coaches');
+    }
   }
 };
 </script>

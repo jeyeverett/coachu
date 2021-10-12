@@ -18,6 +18,7 @@ export default {
 
     if (!response.ok) {
       let errorMessage = '';
+
       if (data.error && data.error.message) {
         switch (data.error.message) {
           case 'EMAIL_NOT_FOUND':
@@ -51,5 +52,12 @@ export default {
     };
 
     context.commit('setCurrentUser', authData);
+  },
+  signOut(context) {
+    context.commit('setCurrentUser', {
+      token: null,
+      userId: null,
+      tokenExpiry: null
+    });
   }
 };
