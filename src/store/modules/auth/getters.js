@@ -5,10 +5,10 @@ export default {
   token(state) {
     return state.token;
   },
-  tokenExpiry(state) {
-    return state.tokenExpiry;
-  },
   isLoggedIn(state) {
     return !!state.token;
+  },
+  didAutoSignOut(state) {
+    return state.didAutoSignOut;
   }
 };

@@ -1,9 +1,12 @@
+let autoSignOutTimer;
+
 export default {
   async authenticate(context, payload) {
     const {
       user: { email, password },
       id: mode
     } = payload;
+
     let URL = mode === 'signin' ? 'signInWithPassword' : 'signUp';
 
     const response = await fetch(
@@ -45,19 +48,57 @@ export default {
       throw error;
     }
 
+    const tokenExpiry = Number(data.expiresIn) * 1000 + new Date().getTime();
+
+    localStorage.setItem('userId', data.localId);
+    localStorage.setItem('token', data.idToken);
+    localStorage.setItem('tokenExpiry', tokenExpiry);
+
+    autoSignOutTimer = setTimeout(
+      () => context.dispatch('autoSignOut'),
+      tokenExpiry
+    );
+
     const authData = {
       token: data.idToken,
-      userId: data.localId,
-      tokenExpiry: data.expiresIn
+      userId: data.localId
     };
 
     context.commit('setCurrentUser', authData);
   },
+  autoLogin(context) {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const tokenExpiry = localStorage.getItem('tokenExpiry');
+
+    const newTokenExpiry = Number(tokenExpiry) - new Date().getTime();
+
+    if (newTokenExpiry < 0) {
+      return;
+    }
+
+    if (token && userId) {
+      autoSignOutTimer = setTimeout(
+        () => context.dispatch('autoSignOut'),
+        newTokenExpiry
+      );
+      context.commit('setCurrentUser', { userId, token });
+    }
+  },
   signOut(context) {
+    clearTimeout(autoSignOutTimer);
+
+    localStorage.removeItem('userId');
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpiry');
+
     context.commit('setCurrentUser', {
       token: null,
-      userId: null,
-      tokenExpiry: null
+      userId: null
     });
+  },
+  autoSignOut(context) {
+    context.dispatch('signOut');
+    context.commit('setAutoSignOut');
   }
 };

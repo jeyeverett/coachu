@@ -11,17 +11,28 @@
 
 <script>
 import TheHeader from './components/layout/TheHeader';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
     TheHeader
   },
+  computed: {
+    ...mapGetters(['didAutoSignOut'])
+  },
   methods: {
-    ...mapActions(['loadCoaches'])
+    ...mapActions(['loadCoaches', 'autoLogin'])
   },
   created() {
     this.loadCoaches();
+    this.autoLogin();
+  },
+  watch: {
+    didAutoSignOut(newVal, oldVal) {
+      if (!oldVal && oldVal !== newVal) {
+        this.$router.replace('/coaches');
+      }
+    }
   }
 };
 </script>

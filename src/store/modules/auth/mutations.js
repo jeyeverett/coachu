@@ -1,8 +1,11 @@
 export default {
   setCurrentUser(state, payload) {
-    const { token, userId, tokenExpiry } = payload;
+    const { token, userId } = payload;
+    state.didAutoSignOut = false;
     state.token = token;
     state.userId = userId;
-    state.tokenExpiry = tokenExpiry;
+  },
+  setAutoSignOut(state) {
+    state.didAutoSignOut = true;
   }
 };
