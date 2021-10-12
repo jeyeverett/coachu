@@ -7,5 +7,12 @@ export default {
   },
   isCoach(_, getters, _2, rootGetters) {
     return getters.getCoaches.some(coach => coach.id === rootGetters.userId);
+  },
+  shouldFetchNew(state) {
+    const { lastFetch } = state;
+    if (!lastFetch) return true;
+
+    const currentTimestamp = new Date().getTime();
+    return (currentTimestamp - lastFetch) / 1000 > 60;
   }
 };

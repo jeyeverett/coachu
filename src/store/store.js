@@ -43,10 +43,10 @@ const store = createStore({
     loadingError(context, error) {
       context.commit('setError', error);
     },
-    loadCoaches(context) {
+    loadCoaches(context, payload) {
       context.dispatch('loadingStart');
       context.dispatch('loadingError', null);
-      this.dispatch('coaches/fetchCoaches')
+      this.dispatch('coaches/fetchCoaches', payload)
         .then(() => {
           context.dispatch('loadingFinish');
         })

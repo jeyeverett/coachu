@@ -6,7 +6,10 @@
 
   <section>
     <div class="actions">
-      <base-button mode="ghost" style="marginRight: 1rem;" @click="loadCoaches"
+      <base-button
+        mode="ghost"
+        style="marginRight: 1rem;"
+        @click="loadCoaches({ refresh: true })"
         >Refresh</base-button
       >
       <base-button style="marginRight: 1rem;" @click="toggleFilters"
@@ -16,7 +19,7 @@
         to="/register"
         :link="true"
         mode="register"
-        v-if="!isLoading && !isCoach"
+        v-if="(!isCoach && !isLoading) || !isCoach"
         >Register</base-button
       >
     </div>

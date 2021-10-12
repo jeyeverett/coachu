@@ -1,5 +1,7 @@
 export default {
-  async fetchCoaches(context) {
+  async fetchCoaches(context, payload) {
+    if (payload && !payload.refresh && !context.getters.shouldFetchNew) return;
+
     const response = await fetch(
       `https://coachu-71b4b-default-rtdb.firebaseio.com/coaches.json`
     );
@@ -18,6 +20,7 @@ export default {
     }
 
     context.commit('setCoaches', coaches);
+    context.commit('setFetchTimestamp');
   },
   async registerCoach(context, data) {
     const { userId } = context.rootGetters;
