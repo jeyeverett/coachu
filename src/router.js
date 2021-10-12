@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import CoachList from './pages/coaches/CoachList';
-import CoachDetails from './pages/coaches/CoachDetails';
-import CoachContact from './pages/coaches/CoachContact';
-import CoachReg from './pages/coaches/CoachReg';
-import ReqReceived from './pages/requests/ReqReceived';
+const CoachList = () => import('./pages/coaches/CoachList');
+const CoachDetails = () => import('./pages/coaches/CoachDetails');
+const CoachContact = () => import('./pages/coaches/CoachContact');
+const CoachReg = () => import('./pages/coaches/CoachReg');
+const ReqReceived = () => import('./pages/requests/ReqReceived');
 import NotFound from './pages/NotFound';
-import UserAuth from './pages/auth/UserAuth';
+const UserAuth = () => import('./pages/auth/UserAuth');
 
 import store from './store/store';
 
