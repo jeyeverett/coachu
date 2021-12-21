@@ -1,67 +1,67 @@
 <template>
   <section>
-    <h1 style="textAlign: center;">Sign-in / Sign-up</h1>
-    <base-card style="margin: 0 auto;">
-      <form @submit.prevent>
-        <div class="form-control">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            v-model.trim="user.email"
-            :class="{ invalid: invalid.email }"
-            @input="validate"
-          />
-          <transition>
-            <span class="invalid-arrow" v-show="invalid.email">&#8594;</span>
-          </transition>
-        </div>
-        <div class="form-control">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            v-model.trim="user.password"
-            :class="{ invalid: invalid.password }"
-            @input="validate"
-          />
-          <transition>
-            <span class="invalid-arrow" v-show="invalid.password">&#8594;</span>
-          </transition>
-        </div>
-        <div v-if="isLoading">
-          <base-spinner />
-        </div>
-        <div v-else>
-          <base-button
-            id="signin"
-            style="marginTop: 2rem; width: 100%;"
-            :disabled="!enableButton"
-            mode="register"
-            :class="enableButton ? 'valid' : 'invalid'"
-            @click="submitForm"
-            >Sign-in</base-button
-          >
-          <p
-            style="marginTop: 2rem; width: 100%; textAlign: center; fontSize: 1.2rem; fontWeight: bold;"
-          >
-            OR
-          </p>
-          <base-button
-            id="signup"
-            type="button"
-            style="marginTop: 2rem; width: 100%;"
-            :disabled="!enableButton"
-            :class="enableButton ? '' : 'invalid'"
-            @click="submitForm"
-            >Sign-up</base-button
-          >
-          <transition name="error">
-            <div class="inline-error" v-if="isError">{{ isError }}</div>
-          </transition>
-        </div>
-      </form>
-    </base-card>
+    <h1 style="textAlign: center; margin-bottom: 30px;">Sign-in / Sign-up</h1>
+    <form @submit.prevent style="margin: 0 auto;">
+      <div class="form-control">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          v-model.trim="user.email"
+          :class="{ invalid: invalid.email }"
+          @input="validate"
+        />
+        <transition>
+          <span class="invalid-arrow" v-show="invalid.email">&#8594;</span>
+        </transition>
+      </div>
+      <div class="form-control">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          v-model.trim="user.password"
+          :class="{ invalid: invalid.password }"
+          @input="validate"
+        />
+        <transition>
+          <span class="invalid-arrow" v-show="invalid.password">&#8594;</span>
+        </transition>
+      </div>
+      <div v-if="isLoading">
+        <BaseSpinner />
+      </div>
+      <div v-else>
+        <BaseButton
+          id="signin"
+          style="marginTop: 2rem; width: 100%;"
+          :disabled="!enableButton"
+          mode="register"
+          :class="enableButton ? 'valid' : 'invalid'"
+          @click="submitForm"
+        >
+          Sign in
+        </BaseButton>
+        <p
+          style="marginTop: 2rem; width: 100%; textAlign: center; fontSize: 1.2rem; fontWeight: bold;"
+        >
+          OR
+        </p>
+        <BaseButton
+          id="signup"
+          type="button"
+          style="marginTop: 2rem; width: 100%;"
+          :disabled="!enableButton"
+          :class="enableButton ? '' : 'invalid'"
+          @click="submitForm"
+        >
+          Sign up
+        </BaseButton>
+        <transition name="error">
+          <div class="inline-error" v-if="isError">{{ isError }}</div>
+        </transition>
+      </div>
+    </form>
   </section>
 </template>
 
@@ -109,7 +109,9 @@ export default {
         this.$router.replace(redirect ? '/register' : '/coaches');
       } catch (error) {
         this.loadingFinish();
-        this.loadingError(error);
+        this.loadingError(
+          error.message || 'Network error - please try again later.'
+        );
       }
     }
   },

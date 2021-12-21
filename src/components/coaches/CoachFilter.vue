@@ -1,8 +1,32 @@
 <template>
-  <base-card>
+  <BaseCard>
     <section>
-      <h2>Find By Specialty</h2>
+      <h2 style="margin-bottom: 30px;">Find By Specialty</h2>
       <div>
+        <span>
+          <label for="vue">Vue</label>
+          <input type="checkbox" id="vue" checked @click="setFilters" />
+        </span>
+        <span>
+          <label for="react">React</label>
+          <input type="checkbox" id="react" checked @click="setFilters" />
+        </span>
+        <span>
+          <label for="angular">Angular</label>
+          <input type="checkbox" id="angular" checked @click="setFilters" />
+        </span>
+        <span>
+          <label for="css">CSS</label>
+          <input type="checkbox" id="css" checked @click="setFilters" />
+        </span>
+        <span>
+          <label for="html">HTML</label>
+          <input type="checkbox" id="html" checked @click="setFilters" />
+        </span>
+        <span>
+          <label for="cloud">Cloud</label>
+          <input type="checkbox" id="cloud" checked @click="setFilters" />
+        </span>
         <span>
           <label for="frontend">Frontend</label>
           <input type="checkbox" id="frontend" checked @click="setFilters" />
@@ -17,7 +41,7 @@
         </span>
       </div>
     </section>
-  </base-card>
+  </BaseCard>
 </template>
 
 <script>

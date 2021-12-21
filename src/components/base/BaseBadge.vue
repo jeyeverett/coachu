@@ -8,11 +8,13 @@
 @import '/src/variables.scss';
 
 .badge {
-  padding: 1rem 2rem;
-  margin: 1rem;
-  border: $border;
-  border-radius: $border-radius;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 700;
   font-size: 1.4rem;
   line-height: 1.4rem;
+  letter-spacing: 2px;
 }
 </style>

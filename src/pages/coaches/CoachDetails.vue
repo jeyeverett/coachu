@@ -1,39 +1,46 @@
 <template>
   <router-view v-if="this.$route.path.includes('contact')" />
   <div v-else-if="isLoading">
-    <base-spinner />
+    <BaseSpinner />
   </div>
-  <base-card v-else>
+  <BaseCard v-else-if="getCoach">
     <section class="coach-details">
+      <img v-if="imageUrl" :src="imageUrl" alt="" width="50" height="50" />
       <h2>{{ fullName }}</h2>
-      <p class="coach-details__description">{{ description }}</p>
       <p class="coach-details__rate">${{ rate }}/hour</p>
+      <p class="coach-details__description">{{ description }}</p>
       <div class="coach-details__badges">
-        <base-badge v-for="area in areas" :key="area">{{ area }}</base-badge>
+        <BaseBadge v-for="area in areas" :key="area">{{ area }}</BaseBadge>
       </div>
       <div class="coach-details__contact">
         <h3>Interested? Reach out Now!</h3>
-        <base-button :to="contactLink" mode="register" :link="true"
-          >Contact</base-button
-        >
+        <BaseButton :to="contactLink" mode="register" :link="true">
+          Contact
+        </BaseButton>
       </div>
     </section>
-  </base-card>
+  </BaseCard>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 export default {
   props: ['coachId'],
-  // data() {
-  //   return {
-  //     isLoading: true
-  //   };
-  // },
+  created() {
+    setTimeout(() => {
+      if (!this.getCoach) {
+        this.$router.push({
+          name: '404ResourceNotFound',
+          params: { resource: 'coach' }
+        });
+      }
+    }, 1000);
+  },
   computed: {
     ...mapGetters('coaches', ['getCoaches']),
     getCoach() {
-      return this.getCoaches.find(coach => coach.id === this.coachId);
+      const coach = this.getCoaches.find(coach => coach.id === this.coachId);
+      return coach ? coach : undefined;
     },
     fullName() {
       return this.getCoach.firstName + ' ' + this.getCoach.lastName;
@@ -50,37 +57,22 @@ export default {
     rate() {
       return this.getCoach.hourlyRate;
     },
+    imageUrl() {
+      return this.getCoach.imageUrl;
+    },
     isLoading() {
       return this.$store.state.isLoading;
     }
   }
-  // methods: {
-  //   ...mapActions('coaches', ['fetchCoaches']),
-  //   loadCoaches() {
-  //     this.isLoading = true;
-  //     this.error = null;
-  //     this.fetchCoaches()
-  //       .then(() => {
-  //         this.isLoading = false;
-  //       })
-  //       .catch(() => {
-  //         this.isLoading = false;
-  //         this.error = 'Network Error - please try again later.';
-  //       });
-  //   }
-  // },
-  // created() {
-  //   this.loadCoaches();
-  // },
-  // watch: {
-  //   coachId() {
-  //     this.loadCoaches();
-  //   }
-  // }
 };
 </script>
 
 <style lang="scss" scoped>
+img {
+  height: 50px;
+  border-radius: 100%;
+  width: auto;
+}
 h2 {
   font-size: 2.4rem;
 }
@@ -113,6 +105,7 @@ h2 {
   &__contact {
     display: flex;
     align-items: center;
+    margin-top: 2rem;
 
     h3 {
       margin: 0;

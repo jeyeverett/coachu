@@ -1,12 +1,12 @@
 import { createStore } from 'vuex';
 import coachesModule from './modules/coaches/index';
-import requestsModule from './modules/requests/index';
+import messagesModule from './modules/messages/index';
 import authModule from './modules/auth/index';
 
 const store = createStore({
   modules: {
     coaches: coachesModule,
-    requests: requestsModule,
+    messages: messagesModule,
     auth: authModule
   },
   state() {
@@ -44,17 +44,13 @@ const store = createStore({
     loadCoaches(context, payload) {
       context.dispatch('loadingStart');
       context.dispatch('loadingError', null);
-      this.dispatch('coaches/fetchCoaches', payload)
-        .then(() => {
-          context.dispatch('loadingFinish');
-        })
-        .catch(() => {
-          context.dispatch('loadingFinish');
-          context.dispatch(
-            'loadingError',
-            'Network Error - please try again later.'
-          );
-        });
+      this.dispatch('coaches/fetchCoaches', payload).catch(() => {
+        context.dispatch('loadingFinish');
+        context.dispatch(
+          'loadingError',
+          'Network Error - please try again later.'
+        );
+      });
     }
   }
 });

@@ -1,33 +1,42 @@
 <template>
-  <base-card>
+  <BaseCard>
     <li>
       <article>
-        <h3>{{ fullName }}</h3>
-        <h4>${{ hourlyRate }}/hour</h4>
+        <div style="display: flex; align-items: center;">
+          <img
+            v-if="imageUrl"
+            :src="imageUrl"
+            alt="coach image"
+            width="50"
+            height="50"
+          />
+          <h3 style="margin: 0; margin-left: 10px;">{{ fullName }}</h3>
+          <h4 style="margin: 0; margin-left: 10px;">${{ hourlyRate }}/hour</h4>
+        </div>
         <div class="badges">
-          <base-badge v-for="area in areas" :key="area">{{ area }}</base-badge>
+          <BaseBadge v-for="area in areas" :key="area">{{ area }}</BaseBadge>
         </div>
       </article>
       <div class="actions">
-        <base-button
+        <BaseButton
           :to="detailsLink"
           style="marginBottom: 1rem;"
           :link="true"
           @click="scrollToTop"
         >
-          View Details
-        </base-button>
-        <base-button :to="contactLink" :link="true" @click="scrollToTop">
+          Details
+        </BaseButton>
+        <BaseButton :to="contactLink" :link="true" @click="scrollToTop">
           Contact
-        </base-button>
+        </BaseButton>
       </div>
     </li>
-  </base-card>
+  </BaseCard>
 </template>
 
 <script>
 export default {
-  props: ['firstName', 'lastName', 'id', 'hourlyRate', 'areas'],
+  props: ['firstName', 'lastName', 'id', 'hourlyRate', 'areas', 'imageUrl'],
   computed: {
     fullName() {
       return this.firstName + ' ' + this.lastName;
@@ -48,6 +57,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+img {
+  height: 50px;
+  border-radius: 100%;
+  width: auto;
+}
 li {
   width: 100%;
   display: flex;

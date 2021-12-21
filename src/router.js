@@ -3,9 +3,10 @@ const CoachList = () => import('./pages/coaches/CoachList');
 const CoachDetails = () => import('./pages/coaches/CoachDetails');
 const CoachContact = () => import('./pages/coaches/CoachContact');
 const CoachReg = () => import('./pages/coaches/CoachReg');
-const ReqReceived = () => import('./pages/requests/ReqReceived');
+const MessageReceived = () => import('./pages/messages/MessageReceived');
+const UserAuth = () =>
+  import(/* webpackChunkName: "user-auth" */ './pages/auth/UserAuth');
 import NotFound from './pages/NotFound';
-const UserAuth = () => import('./pages/auth/UserAuth');
 
 import store from './store/store';
 
@@ -50,14 +51,20 @@ const router = createRouter({
       }
     },
     {
-      path: '/requests',
-      component: ReqReceived,
+      path: '/messages',
+      component: MessageReceived,
       meta: {
         auth: true
       }
     },
     {
       path: '/:notFound(.*)',
+      component: NotFound
+    },
+    {
+      path: '/404/:resource',
+      name: '404ResourceNotFound',
+      props: true,
       component: NotFound
     }
   ],

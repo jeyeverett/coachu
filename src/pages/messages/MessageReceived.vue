@@ -1,22 +1,23 @@
 <template>
   <section>
     <header>
-      <h1>Requests Page</h1>
+      <h1>Messages Page</h1>
     </header>
     <div v-if="isLoading">
-      <base-spinner />
+      <BaseSpinner />
     </div>
     <section v-else-if="!isLoading">
       <ul>
-        <request-item
-          v-for="request in getRequests"
+        <Message
+          v-for="request in getMessages"
           :key="request.id"
           v-bind="request"
         />
       </ul>
-      <base-card v-if="!isError && !hasRequests">
-        <h3>You haven't received any requests yet.</h3>
-      </base-card>
+
+      <BaseCard v-if="!isError && !hasMessages">
+        <h3>You haven't received any messages yet.</h3>
+      </BaseCard>
     </section>
     <div class="error" v-if="!isLoading && isError">{{ isError }}</div>
   </section>
@@ -24,32 +25,32 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import RequestItem from '../../components/requests/RequestItem.vue';
+import Message from '../../components/messages/Message.vue';
 
 export default {
   components: {
-    RequestItem
+    Message
   },
   computed: {
-    ...mapGetters('requests', ['getRequests', 'hasRequests']),
+    ...mapGetters('messages', ['getMessages', 'hasMessages']),
     ...mapGetters(['isLoading', 'isError'])
   },
   methods: {
-    ...mapActions('requests', ['fetchRequests']),
+    ...mapActions('messages', ['fetchMessages']),
     ...mapActions(['loadingStart', 'loadingFinish', 'loadingError']),
-    async loadRequests() {
+    async loadMessages() {
       this.loadingStart();
       try {
-        await this.fetchRequests();
+        await this.fetchMessages();
         this.loadingFinish();
       } catch (err) {
-        this.loadingError('Failed to load requests - please try again later.');
+        this.loadingError('Failed to load messages - please try again later.');
         this.loadingFinish();
       }
     }
   },
   created() {
-    this.loadRequests();
+    this.loadMessages();
   }
 };
 </script>

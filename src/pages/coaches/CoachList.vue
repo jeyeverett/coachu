@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1>The Coaches Page</h1>
+    <h1>Find a CodeCoach</h1>
 
     <section class="details">
       <router-view v-slot="slotProps">
@@ -10,47 +10,59 @@
       </router-view>
     </section>
 
-    <section>
+    <section style="padding-bottom: 20px;">
       <div class="actions">
-        <base-button
+        <BaseButton
           mode="ghost"
           style="marginRight: 1rem;"
           @click="loadCoaches({ refresh: true })"
-          >Refresh</base-button
         >
-        <base-button style="marginRight: 1rem;" @click="toggleFilters"
-          >Filters</base-button
-        >
-        <base-button
+          Refresh
+        </BaseButton>
+        <BaseButton style="marginRight: 1rem;" @click="toggleFilters">
+          Filters
+        </BaseButton>
+        <BaseButton
           to="/register"
           :link="true"
           mode="register"
           v-if="showRegisterButton"
-          >Register</base-button
         >
-        <base-button
+          Register
+        </BaseButton>
+        <BaseButton
           to="/auth?redirect=register"
           :link="true"
           mode="register"
-          v-else
+          v-else-if="!isLoggedIn"
           title="Sign in to register as a coach"
-          >Sign-In</base-button
         >
+          Sign In
+        </BaseButton>
       </div>
-      <div class="actions" v-show="showFilters">
-        <coach-filter @change-filter="setFilters" />
-      </div>
-      <div v-if="isLoading">
-        <base-spinner />
-      </div>
-      <ul v-else-if="hasCoaches">
-        <coach-item
-          v-for="coach in filteredCoaches"
-          :key="coach.id"
-          v-bind="coach"
-        />
-      </ul>
-      <h3 v-else-if="!isError">No coaches found.</h3>
+      <transition>
+        <div class="actions" v-show="showFilters">
+          <CoachFilter @change-filter="setFilters" />
+        </div>
+      </transition>
+      <transition mode="out-in">
+        <div v-if="isLoading">
+          <BaseSpinner />
+        </div>
+        <ul v-else>
+          <CoachItem
+            v-for="coach in filteredCoaches"
+            :key="coach.id"
+            v-bind="coach"
+          />
+        </ul>
+      </transition>
+      <transition>
+        <h3 v-if="!isError && !filteredCoaches" style="text-align: center;">
+          No coaches found.
+        </h3>
+      </transition>
+
       <transition name="error">
         <div class="error" v-if="isError">{{ isError }}</div>
       </transition>
@@ -92,6 +104,30 @@ export default {
         }
 
         if (coach.areas.includes('career') && this.activeFilters.career) {
+          return true;
+        }
+
+        if (coach.areas.includes('vue') && this.activeFilters.frontend) {
+          return true;
+        }
+
+        if (coach.areas.includes('react') && this.activeFilters.backend) {
+          return true;
+        }
+
+        if (coach.areas.includes('angular') && this.activeFilters.career) {
+          return true;
+        }
+
+        if (coach.areas.includes('css') && this.activeFilters.frontend) {
+          return true;
+        }
+
+        if (coach.areas.includes('html') && this.activeFilters.backend) {
+          return true;
+        }
+
+        if (coach.areas.includes('cloud') && this.activeFilters.career) {
           return true;
         }
 

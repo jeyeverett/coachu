@@ -1,14 +1,29 @@
 <template>
   <section>
-    <base-card style="margin: 0 auto; flex-direction: column;">
-      <h1>Page Not Found!</h1>
+    <BaseCard style="margin: 0 auto; flex-direction: column;">
+      <h1>
+        {{ resource ? resource[0].toUpperCase() + resource.slice(1) : 'Page' }}
+        Not Found!
+      </h1>
       <p>
-        Could not find this page - check out our list of
+        Could not find this {{ resource ? resource : 'page' }} - check out our
+        list of
         <router-link to="/coaches">coaches</router-link>
       </p>
-    </base-card>
+    </BaseCard>
   </section>
 </template>
+
+<script>
+export default {
+  props: {
+    resource: {
+      type: String,
+      default: ''
+    }
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 section {

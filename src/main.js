@@ -10,10 +10,10 @@ import store from './store/store';
 
 const app = createApp(App);
 
-app.component('base-button', BaseButton);
-app.component('base-card', BaseCard);
-app.component('base-badge', BaseBadge);
-app.component('base-spinner', BaseSpinner);
+app.component('BaseButton', BaseButton);
+app.component('BaseCard', BaseCard);
+app.component('BaseBadge', BaseBadge);
+app.component('BaseSpinner', BaseSpinner);
 
 app.use(router);
 app.use(store);

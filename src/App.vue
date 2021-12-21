@@ -57,6 +57,7 @@ html {
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: $color-black;
+  background-color: rgb(240, 240, 240);
 }
 
 main {
@@ -85,8 +86,9 @@ a {
 }
 
 h1 {
-  font-size: 2.4rem;
+  font-size: 2.8rem;
   margin-bottom: 1.4rem;
+  font-family: monospace;
 }
 
 h2 {
@@ -116,6 +118,13 @@ h4 {
   color: $color-error;
   text-align: center;
   margin: 2rem 0;
+}
+
+.v-enter-active {
+  animation: component 0.3s ease-in forwards;
+}
+.v-leave-active {
+  animation: component 0.3s ease-in reverse;
 }
 
 .route-enter-active {

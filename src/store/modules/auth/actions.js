@@ -47,17 +47,16 @@ export default {
       );
       throw error;
     }
-
-    const tokenExpiry = Number(data.expiresIn) * 1000 + new Date().getTime();
+    const tokenExpiry = data.expiresIn * 1000;
 
     localStorage.setItem('userId', data.localId);
     localStorage.setItem('token', data.idToken);
     localStorage.setItem('tokenExpiry', tokenExpiry);
 
-    autoSignOutTimer = setTimeout(
-      () => context.dispatch('autoSignOut'),
-      tokenExpiry
-    );
+    autoSignOutTimer = setTimeout(() => {
+      context.dispatch('autoSignOut');
+      console.log(' expired');
+    }, tokenExpiry);
 
     const authData = {
       token: data.idToken,
@@ -71,7 +70,7 @@ export default {
     const token = localStorage.getItem('token');
     const tokenExpiry = localStorage.getItem('tokenExpiry');
 
-    const newTokenExpiry = Number(tokenExpiry) - new Date().getTime();
+    const newTokenExpiry = Number(tokenExpiry) - 3600;
 
     if (newTokenExpiry < 0) {
       return;

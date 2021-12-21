@@ -21,6 +21,7 @@ export default {
 
     context.commit('setCoaches', coaches);
     context.commit('setFetchTimestamp');
+    context.dispatch('loadingFinish', null, { root: true });
   },
   async registerCoach(context, data) {
     const { userId, token } = context.rootGetters;
@@ -29,7 +30,11 @@ export default {
       `https://coachu-71b4b-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`,
       {
         method: 'PUT',
-        body: JSON.stringify(data.coach)
+        body: JSON.stringify({
+          ...data.coach,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        })
       }
     );
 
@@ -37,6 +42,9 @@ export default {
       throw new Error('Failed to save to database!');
     }
 
-    context.commit('registerCoach', { ...data.coach, id: userId });
+    context.commit('registerCoach', {
+      ...data.coach,
+      id: userId
+    });
   }
 };

@@ -1,11 +1,11 @@
 <template>
-  <base-card>
+  <BaseCard>
     <li>
       <h3>{{ email }}</h3>
       <p>{{ message }}</p>
       <a :href="emailLink" link="true">Reply</a>
     </li>
-  </base-card>
+  </BaseCard>
 </template>
 
 <script>

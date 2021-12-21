@@ -2,20 +2,20 @@
   <header>
     <nav>
       <router-link to="/">
-        <span class="logo">coachu</span>
+        <span class="logo">codecoach</span>
       </router-link>
       <ul>
         <li>
           <router-link to="/coaches">Coaches</router-link>
         </li>
         <li ref="" v-if="isLoggedIn">
-          <router-link to="/requests">Requests</router-link>
+          <router-link to="/messages">Messages</router-link>
         </li>
         <li ref="" v-if="isLoggedIn">
           <a @click="logOut">Sign-Out</a>
         </li>
         <li v-else>
-          <router-link to="/auth">Sign-In</router-link>
+          <router-link to="/auth">Sign In/Up</router-link>
         </li>
       </ul>
     </nav>
@@ -74,7 +74,8 @@ a.router-link-active {
 
 .logo {
   font-weight: bold;
-  color: grey;
+  color: darkgray;
   font-size: 1.8rem;
+  font-family: monospace;
 }
 </style>

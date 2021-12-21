@@ -1,8 +1,8 @@
 <template>
   <div v-if="isLoading">
-    <base-spinner />
+    <BaseSpinner />
   </div>
-  <base-card v-else style="display: flex; flex-direction: column;">
+  <BaseCard v-else-if="getCoach" style="display: flex; flex-direction: column;">
     <header>
       <h2>Contact {{ fullName }}</h2>
     </header>
@@ -47,19 +47,19 @@
         </transition>
       </div>
       <div>
-        <base-button
+        <BaseButton
           :disabled="!enableButton"
           class="register"
           :class="enableButton ? 'valid' : 'invalid'"
         >
           Send Message
-        </base-button>
+        </BaseButton>
       </div>
     </form>
     <section style="textAlign: right; margin: 2rem;">
-      <base-button :to="detailsLink" :link="true">Details</base-button>
+      <BaseButton :to="detailsLink" :link="true">Details</BaseButton>
     </section>
-  </base-card>
+  </BaseCard>
 </template>
 
 <script>
@@ -78,11 +78,13 @@ export default {
       enableButton: false
     };
   },
+
   computed: {
     ...mapGetters('coaches', ['getCoaches']),
     ...mapGetters(['isLoading', 'isError']),
     getCoach() {
-      return this.getCoaches.find(coach => coach.id === this.coachId);
+      const coach = this.getCoaches.find(coach => coach.id === this.coachId);
+      return coach ? coach : undefined;
     },
     fullName() {
       return this.getCoach.firstName + ' ' + this.getCoach.lastName;
@@ -92,7 +94,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('requests', ['sendRequest']),
+    ...mapActions('messages', ['sendMessage']),
     validate({ target: { id, value } }) {
       if (id === 'email' && (!value.includes('@') || !value.includes('.'))) {
         this.invalid[id] = true;
@@ -104,7 +106,7 @@ export default {
     sendMessage() {
       if (this.email === '' || this.message === '') return;
 
-      this.sendRequest({
+      this.sendMessage({
         coachId: this.coachId,
         email: this.email,
         message: this.message
@@ -130,6 +132,14 @@ export default {
         }),
       300
     );
+    setTimeout(() => {
+      if (!this.getCoach) {
+        this.$router.push({
+          name: '404ResourceNotFound',
+          params: { resource: 'coach' }
+        });
+      }
+    }, 1000);
   },
   watch: {
     invalid: {
