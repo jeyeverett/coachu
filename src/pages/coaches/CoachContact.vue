@@ -9,7 +9,7 @@
     <transition>
       <h3 v-if="sentMessage">Message Sent!</h3>
     </transition>
-    <form @submit.prevent="sendMessage">
+    <form @submit.prevent="sendNewMessage">
       <div class="form-control">
         <label for="email">Your e-mail</label>
         <input
@@ -103,7 +103,7 @@ export default {
 
       this.invalid[id] = value === '';
     },
-    sendMessage() {
+    sendNewMessage() {
       if (this.email === '' || this.message === '') return;
 
       this.sendMessage({

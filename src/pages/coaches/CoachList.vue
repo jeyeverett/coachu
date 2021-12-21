@@ -1,6 +1,9 @@
 <template>
   <section style="padding-bottom: 20px;">
     <h1>Find a CodeCoach</h1>
+    <p style="text-align: center; margin-bottom: 20px;">
+      Contact a coach for free - register as a coach by signing in/up
+    </p>
 
     <section class="details">
       <router-view v-slot="slotProps">
