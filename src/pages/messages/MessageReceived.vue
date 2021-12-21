@@ -15,9 +15,7 @@
         />
       </ul>
 
-      <BaseCard v-if="!isError && !hasMessages">
-        <h3>You haven't received any messages yet.</h3>
-      </BaseCard>
+      <h3>You haven't received any messages yet.</h3>
     </section>
     <div class="error" v-if="!isLoading && isError">{{ isError }}</div>
   </section>

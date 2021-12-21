@@ -2,7 +2,7 @@
   <BaseCard>
     <section>
       <h2 style="margin-bottom: 30px;">Find By Specialty</h2>
-      <div>
+      <div class="filters">
         <span>
           <label for="vue">Vue</label>
           <input type="checkbox" id="vue" checked @click="setFilters" />
@@ -52,7 +52,13 @@ export default {
       filters: {
         frontend: true,
         backend: true,
-        career: true
+        career: true,
+        vue: true,
+        react: true,
+        angular: true,
+        css: true,
+        html: true,
+        cloud: true
       }
     };
   },
@@ -93,5 +99,14 @@ div {
 span {
   display: flex;
   align-items: center;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+
+  span {
+    margin-bottom: 0.5rem;
+  }
 }
 </style>

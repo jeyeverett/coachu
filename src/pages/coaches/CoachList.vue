@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section style="padding-bottom: 20px;">
     <h1>Find a CodeCoach</h1>
 
     <section class="details">
@@ -10,7 +10,7 @@
       </router-view>
     </section>
 
-    <section style="padding-bottom: 20px;">
+    <section style="padding: 10px 0 20px 10px;">
       <div class="actions">
         <BaseButton
           mode="ghost"
@@ -67,6 +67,16 @@
         <div class="error" v-if="isError">{{ isError }}</div>
       </transition>
     </section>
+    <div style="text-align: center;">
+      <BaseButton @click="loadMore" v-if="!allLoaded">Load More</BaseButton>
+      <p
+        v-else
+        style="text-align: center; opacity: 0;"
+        :style="{ opacity: allLoaded ? 1 : 0 }"
+      >
+        The End
+      </p>
+    </div>
   </section>
 </template>
 
@@ -82,11 +92,18 @@ export default {
   },
   data() {
     return {
+      loadCount: 5,
       showFilters: true,
       activeFilters: {
         frontend: true,
         backend: true,
-        career: true
+        career: true,
+        vue: true,
+        react: true,
+        angular: true,
+        css: true,
+        html: true,
+        cloud: true
       }
     };
   },
@@ -94,60 +111,69 @@ export default {
     ...mapGetters('coaches', ['getCoaches', 'hasCoaches', 'isCoach']),
     ...mapGetters(['isLoading', 'isError', 'isLoggedIn']),
     filteredCoaches() {
-      return this.getCoaches.filter(coach => {
-        if (coach.areas.includes('frontend') && this.activeFilters.frontend) {
-          return true;
-        }
+      return this.getCoaches
+        .filter(coach => {
+          if (coach.areas.includes('frontend') && this.activeFilters.frontend) {
+            return true;
+          }
 
-        if (coach.areas.includes('backend') && this.activeFilters.backend) {
-          return true;
-        }
+          if (coach.areas.includes('backend') && this.activeFilters.backend) {
+            return true;
+          }
 
-        if (coach.areas.includes('career') && this.activeFilters.career) {
-          return true;
-        }
+          if (coach.areas.includes('career') && this.activeFilters.career) {
+            return true;
+          }
 
-        if (coach.areas.includes('vue') && this.activeFilters.frontend) {
-          return true;
-        }
+          if (coach.areas.includes('vue') && this.activeFilters.vue) {
+            return true;
+          }
 
-        if (coach.areas.includes('react') && this.activeFilters.backend) {
-          return true;
-        }
+          if (coach.areas.includes('react') && this.activeFilters.react) {
+            return true;
+          }
 
-        if (coach.areas.includes('angular') && this.activeFilters.career) {
-          return true;
-        }
+          if (coach.areas.includes('angular') && this.activeFilters.angular) {
+            return true;
+          }
 
-        if (coach.areas.includes('css') && this.activeFilters.frontend) {
-          return true;
-        }
+          if (coach.areas.includes('css') && this.activeFilters.css) {
+            return true;
+          }
 
-        if (coach.areas.includes('html') && this.activeFilters.backend) {
-          return true;
-        }
+          if (coach.areas.includes('html') && this.activeFilters.html) {
+            return true;
+          }
 
-        if (coach.areas.includes('cloud') && this.activeFilters.career) {
-          return true;
-        }
+          if (coach.areas.includes('cloud') && this.activeFilters.cloud) {
+            return true;
+          }
 
-        return false;
-      });
+          return false;
+        })
+        .slice(0, this.loadCount);
     },
     showRegisterButton() {
       return (
         (this.isLoggedIn && !this.isCoach && !this.isLoading) ||
         (!this.isCoach && this.isLoggedIn)
       );
+    },
+    allLoaded() {
+      return this.loadCount >= this.getCoaches.length;
     }
   },
   methods: {
     ...mapActions(['loadCoaches']),
     setFilters(newFilters) {
+      console.log(newFilters);
       this.activeFilters = newFilters;
     },
     toggleFilters() {
       this.showFilters = !this.showFilters;
+    },
+    loadMore() {
+      this.loadCount += 5;
     }
   }
 };
@@ -164,6 +190,11 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+p {
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
 .details {
