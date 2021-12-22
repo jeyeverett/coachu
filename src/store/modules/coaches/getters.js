@@ -14,5 +14,8 @@ export default {
 
     const currentTimestamp = new Date().getTime();
     return (currentTimestamp - lastFetch) / 1000 > 60;
+  },
+  getTags(state) {
+    return state.tags;
   }
 };

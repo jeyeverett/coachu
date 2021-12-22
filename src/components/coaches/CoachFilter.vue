@@ -3,76 +3,45 @@
     <section>
       <h2 style="margin-bottom: 30px;">Find By Specialty</h2>
       <div class="filters">
-        <span>
-          <label for="vue">Vue</label>
-          <input type="checkbox" id="vue" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="react">React</label>
-          <input type="checkbox" id="react" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="angular">Angular</label>
-          <input type="checkbox" id="angular" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="css">CSS</label>
-          <input type="checkbox" id="css" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="html">HTML</label>
-          <input type="checkbox" id="html" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="cloud">Cloud</label>
-          <input type="checkbox" id="cloud" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="frontend">Frontend</label>
-          <input type="checkbox" id="frontend" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="backend">Backend</label>
-          <input type="checkbox" id="backend" checked @click="setFilters" />
-        </span>
-        <span>
-          <label for="career">Career</label>
-          <input type="checkbox" id="career" checked @click="setFilters" />
-        </span>
+        <TagCheckbox
+          v-for="tag in tags"
+          v-model="activeTags"
+          :tag="tag"
+          @change="setFilters"
+          :key="tag"
+          checked
+        />
       </div>
     </section>
   </BaseCard>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
+import TagCheckbox from '../form/TagCheckbox.vue';
 export default {
+  components: { TagCheckbox },
   emits: ['change-filter'],
   data() {
     return {
-      filters: {
-        frontend: true,
-        backend: true,
-        career: true,
-        vue: true,
-        react: true,
-        angular: true,
-        css: true,
-        html: true,
-        cloud: true
-      }
+      activeTags: []
     };
   },
-  methods: {
-    setFilters(event) {
-      const inputId = event.target.id;
-      const isActive = event.target.checked;
-      const newFilters = {
-        ...this.filters,
-        [inputId]: isActive
-      };
-      this.filters = newFilters;
-      this.$emit('change-filter', newFilters);
+  computed: {
+    ...mapGetters('coaches', ['getTags']),
+    tags() {
+      return this.getTags;
     }
+  },
+  methods: {
+    setFilters() {
+      this.$emit('change-filter', this.activeTags);
+    }
+  },
+  created() {
+    this.activeTags = this.getTags;
+    this.setFilters();
   }
 };
 </script>
@@ -103,10 +72,12 @@ span {
 
 .filters {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
+  width: 75%;
 
   span {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
   }
 }
 </style>

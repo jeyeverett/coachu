@@ -1,9 +1,9 @@
 <template>
   <the-header></the-header>
   <main>
-    <router-view v-slot="slotProps">
+    <router-view v-slot="{ Component }">
       <transition name="route" mode="out-in">
-        <component :is="slotProps.Component"></component>
+        <component :is="Component"></component>
       </transition>
     </router-view>
   </main>
@@ -106,6 +106,16 @@ h4 {
   margin-bottom: 0.8rem;
 }
 
+fieldset {
+  border: none;
+}
+
+legend {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+}
+
 .error {
   text-align: center;
   font-size: 3rem;
@@ -121,17 +131,51 @@ h4 {
 }
 
 .v-enter-active {
-  animation: component 0.3s ease-in forwards;
+  animation: componentIn 0.3s ease-in forwards;
 }
+
+.v-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .v-leave-active {
-  animation: component 0.3s ease-in reverse;
+  transition: all 0.5s ease;
+}
+
+.v-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.group-slide-enter-active {
+  animation: componentIn 0.3s ease-in forwards;
+}
+
+.group-slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.group-slide-leave-active {
+  transition: all 0.5s ease;
+  position: absolute;
+}
+
+.group-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.group-slide-move {
+  transition: transform 0.5s ease;
 }
 
 .route-enter-active {
-  animation: errow 0.3s ease-in forwards;
+  animation: routeIn 0.3s ease-in forwards;
 }
 .route-leave-active {
-  animation: errow 0.3s ease-in reverse;
+  animation: routeOut 0.3s ease-in forwards;
 }
 
 .error-enter-active {

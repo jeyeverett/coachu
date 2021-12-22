@@ -1,25 +1,24 @@
 <template>
-  <router-view v-if="this.$route.path.includes('contact')" />
-  <div v-else-if="isLoading">
-    <BaseSpinner />
-  </div>
-  <BaseCard v-else-if="getCoach">
-    <section class="coach-details">
-      <img v-if="imageUrl" :src="imageUrl" alt="" width="50" height="50" />
-      <h2>{{ fullName }}</h2>
-      <p class="coach-details__rate">${{ rate }}/hour</p>
-      <p class="coach-details__description">{{ description }}</p>
-      <div class="coach-details__badges">
-        <BaseBadge v-for="area in areas" :key="area">{{ area }}</BaseBadge>
-      </div>
-      <div class="coach-details__contact">
-        <h3>Interested? Reach out Now!</h3>
-        <BaseButton :to="contactLink" mode="register" :link="true">
-          Contact
-        </BaseButton>
-      </div>
-    </section>
-  </BaseCard>
+  <transition name="route" mode="out-in">
+    <router-view v-if="this.$route.path.includes('contact')" />
+    <BaseCard v-else-if="getCoach">
+      <section class="coach-details">
+        <img v-if="imageUrl" :src="imageUrl" alt="" width="50" height="50" />
+        <h2>{{ fullName }}</h2>
+        <p class="coach-details__rate">${{ rate }}/hour</p>
+        <p class="coach-details__description">{{ description }}</p>
+        <div class="coach-details__badges">
+          <BaseBadge v-for="tag in tags" :key="tag">{{ tag }}</BaseBadge>
+        </div>
+        <div class="coach-details__contact">
+          <h3>Interested? Reach out Now!</h3>
+          <BaseButton :to="contactLink" mode="register" :link="true">
+            Contact
+          </BaseButton>
+        </div>
+      </section>
+    </BaseCard>
+  </transition>
 </template>
 
 <script>
@@ -51,7 +50,7 @@ export default {
     description() {
       return this.getCoach.description;
     },
-    areas() {
+    tags() {
       return this.getCoach.areas;
     },
     rate() {

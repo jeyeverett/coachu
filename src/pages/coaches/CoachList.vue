@@ -2,84 +2,87 @@
   <section style="padding-bottom: 20px;">
     <h1>Find a CodeCoach</h1>
     <p style="text-align: center; margin-bottom: 20px;">
-      Contact a coach for free - register as a coach by signing in/up
+      Contact a coach for free - sign in/up to register as a coach
     </p>
+    <transition-group name="group-slide" tag="section" appear>
+      <section
+        key="coach"
+        class="details"
+        v-if="this.$route.path.slice(1).split('/').length >= 2"
+      >
+        <router-view v-slot="{ Component }">
+          <transition name="route" mode="out-in">
+            <component :is="Component"></component>
+          </transition>
+        </router-view>
+      </section>
 
-    <section class="details">
-      <router-view v-slot="slotProps">
-        <transition name="route" mode="out-in">
-          <component :is="slotProps.Component"></component>
-        </transition>
-      </router-view>
-    </section>
-
-    <section style="padding: 10px 0 20px 10px;">
-      <div class="actions">
-        <BaseButton
-          mode="ghost"
-          style="marginRight: 1rem;"
-          @click="loadCoaches({ refresh: true })"
-        >
-          Refresh
-        </BaseButton>
-        <BaseButton style="marginRight: 1rem;" @click="toggleFilters">
-          Filters
-        </BaseButton>
-        <BaseButton
-          to="/register"
-          :link="true"
-          mode="register"
-          v-if="showRegisterButton"
-        >
-          Register
-        </BaseButton>
-        <BaseButton
-          to="/auth?redirect=register"
-          :link="true"
-          mode="register"
-          v-else-if="!isLoggedIn"
-          title="Sign in to register as a coach"
-        >
-          Sign In
-        </BaseButton>
-      </div>
-      <transition>
-        <div class="actions" v-show="showFilters">
-          <CoachFilter @change-filter="setFilters" />
+      <section style="padding: 10px 0 20px 10px;" key="coaches">
+        <div class="actions">
+          <BaseButton
+            mode="ghost"
+            style="marginRight: 1rem;"
+            @click="loadCoaches({ refresh: true })"
+          >
+            Refresh
+          </BaseButton>
+          <BaseButton style="marginRight: 1rem;" @click="toggleFilters">
+            Filters
+          </BaseButton>
+          <BaseButton
+            to="/register"
+            :link="true"
+            mode="register"
+            v-if="showRegisterButton"
+          >
+            Register
+          </BaseButton>
+          <BaseButton
+            to="/auth?redirect=register"
+            :link="true"
+            mode="register"
+            v-else-if="!isLoggedIn"
+            title="Sign in to register as a coach"
+          >
+            Sign In
+          </BaseButton>
         </div>
-      </transition>
-      <transition mode="out-in">
+        <transition>
+          <div class="actions" v-show="showFilters">
+            <CoachFilter @change-filter="setFilters" />
+          </div>
+        </transition>
         <div v-if="isLoading">
           <BaseSpinner />
         </div>
-        <ul v-else>
+        <ul>
           <CoachItem
             v-for="coach in filteredCoaches"
             :key="coach.id"
             v-bind="coach"
           />
         </ul>
-      </transition>
-      <transition>
-        <h3 v-if="!isError && !filteredCoaches" style="text-align: center;">
-          No coaches found.
-        </h3>
-      </transition>
+        <transition>
+          <h3 v-if="!isError && !filteredCoaches" style="text-align: center;">
+            No coaches found.
+          </h3>
+        </transition>
 
-      <transition name="error">
-        <div class="error" v-if="isError">{{ isError }}</div>
-      </transition>
-    </section>
-    <div style="text-align: center;">
-      <BaseButton @click="loadMore" v-if="!allLoaded">Load More</BaseButton>
-      <p
-        v-else
-        style="text-align: center; opacity: 0;"
-        :style="{ opacity: allLoaded ? 1 : 0 }"
-      >
-        The End
-      </p>
-    </div>
+        <transition name="error">
+          <div class="error" v-if="isError">{{ isError }}</div>
+        </transition>
+        <div style="text-align: center; margin-top: 20px;">
+          <BaseButton @click="loadMore" v-if="!allLoaded">Load More</BaseButton>
+          <p
+            v-else
+            style="text-align: center; opacity: 0;"
+            :style="{ opacity: allLoaded ? 1 : 0 }"
+          >
+            The End
+          </p>
+        </div>
+      </section>
+    </transition-group>
   </section>
 </template>
 
@@ -97,64 +100,29 @@ export default {
     return {
       loadCount: 5,
       showFilters: true,
-      activeFilters: {
-        frontend: true,
-        backend: true,
-        career: true,
-        vue: true,
-        react: true,
-        angular: true,
-        css: true,
-        html: true,
-        cloud: true
-      }
+      activeFilters: []
     };
   },
   computed: {
-    ...mapGetters('coaches', ['getCoaches', 'hasCoaches', 'isCoach']),
+    ...mapGetters('coaches', [
+      'getCoaches',
+      'hasCoaches',
+      'isCoach',
+      'getTags'
+    ]),
     ...mapGetters(['isLoading', 'isError', 'isLoggedIn']),
     filteredCoaches() {
-      return this.getCoaches
+      const filtered = this.getCoaches
         .filter(coach => {
-          if (coach.areas.includes('frontend') && this.activeFilters.frontend) {
-            return true;
+          const { areas: tags } = coach;
+          for (let tag of tags) {
+            if (this.activeFilters.includes(tag)) return true;
           }
-
-          if (coach.areas.includes('backend') && this.activeFilters.backend) {
-            return true;
-          }
-
-          if (coach.areas.includes('career') && this.activeFilters.career) {
-            return true;
-          }
-
-          if (coach.areas.includes('vue') && this.activeFilters.vue) {
-            return true;
-          }
-
-          if (coach.areas.includes('react') && this.activeFilters.react) {
-            return true;
-          }
-
-          if (coach.areas.includes('angular') && this.activeFilters.angular) {
-            return true;
-          }
-
-          if (coach.areas.includes('css') && this.activeFilters.css) {
-            return true;
-          }
-
-          if (coach.areas.includes('html') && this.activeFilters.html) {
-            return true;
-          }
-
-          if (coach.areas.includes('cloud') && this.activeFilters.cloud) {
-            return true;
-          }
-
           return false;
         })
         .slice(0, this.loadCount);
+
+      return filtered;
     },
     showRegisterButton() {
       return (
@@ -169,7 +137,6 @@ export default {
   methods: {
     ...mapActions(['loadCoaches']),
     setFilters(newFilters) {
-      console.log(newFilters);
       this.activeFilters = newFilters;
     },
     toggleFilters() {

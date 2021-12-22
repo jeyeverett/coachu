@@ -19,5 +19,6 @@
   height: 100%;
   padding: 2rem;
   max-width: 80rem;
+  background-color: white;
 }
 </style>

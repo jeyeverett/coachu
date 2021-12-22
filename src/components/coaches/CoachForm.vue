@@ -1,161 +1,71 @@
 <template>
   <form @submit.prevent="addCoach">
-    <div class="form-control">
-      <label for="firstName">First Name</label>
-      <input
-        type="text"
-        id="firstName"
-        v-model.trim="coach.firstName"
-        :class="{ invalid: invalid.firstName }"
-        @input="validate"
-      />
-      <transition>
-        <span class="invalid-arrow" v-show="invalid.firstName">&#8594;</span>
-      </transition>
-    </div>
-    <div class="form-control">
-      <label for="lastName">Last Name</label>
-      <input
-        type="text"
-        id="lastName"
-        v-model.trim="coach.lastName"
-        :class="{ invalid: invalid.lastName }"
-        @input="validate"
-      />
-      <transition>
-        <span class="invalid-arrow" v-show="invalid.lastName">&#8594;</span>
-      </transition>
-    </div>
-    <div class="form-control">
-      <label for="imageUrl">Image URL</label>
-      <input
-        type="url"
-        id="imageUrl"
-        v-model.trim="coach.imageUrl"
-        :class="{ invalid: invalid.imageUrl }"
-        @input="validate"
-      />
-      <transition>
-        <span class="invalid-arrow" v-show="invalid.imageUrl">&#8594;</span>
-      </transition>
-    </div>
-    <div class="form-control">
-      <label for="description">Description</label>
-      <textarea
-        id="description"
-        v-model.trim="coach.description"
-        @input="validate"
-        :class="{ invalid: invalid.description }"
-      />
-      <transition>
-        <span class="invalid-arrow" v-show="invalid.description">&#8594;</span>
-      </transition>
-    </div>
-    <div class="form-control">
-      <label for="hourly">Hourly Rate</label>
-      <input
-        id="hourlyRate"
-        type="number"
-        v-model.number="coach.hourlyRate"
-        min="1"
-        @input="validate"
-        :class="{ invalid: invalid.hourlyRate }"
-      />
-      <transition>
-        <span class="invalid-arrow" v-show="invalid.hourlyRate">&#8594;</span>
-      </transition>
-    </div>
-    <div>
-      <h4 style="position: relative;">
+    <FormInput
+      type="text"
+      id="firstName"
+      label="First Name"
+      v-model.trim="coach.firstName"
+      :invalid="invalid.firstName"
+      @input="validate"
+    />
+    <FormInput
+      type="text"
+      id="lastName"
+      label="Last Name"
+      v-model.trim="coach.lastName"
+      :invalid="invalid.lastName"
+      @input="validate"
+    />
+    <FormInput
+      type="text"
+      id="imageUrl"
+      label="Image URL"
+      v-model.trim="coach.imageUrl"
+      :invalid="invalid.imageUrl"
+      @input="validate"
+    />
+    <FormInput
+      type="text"
+      id="description"
+      label="Description"
+      v-model.trim="coach.description"
+      :invalid="invalid.description"
+      @input="validate"
+    />
+
+    <FormInput
+      type="number"
+      id="hourlyRate"
+      label="Hourly Rate"
+      v-model.trim="coach.hourlyRate"
+      :invalid="invalid.hourlyRate"
+      @input="validate"
+    />
+
+    <fieldset style="position: relative;">
+      <legend>
         Specialties
-        <transition>
-          <span
-            class="invalid-arrow"
-            id="invalid-checkbox"
-            v-show="invalid.specialty"
-            >&#8594;</span
-          >
-        </transition>
-      </h4>
+      </legend>
       <div class="form-control__checkbox">
-        <span class="form-control__checkbox--option">
-          <input
-            type="checkbox"
-            id="react"
-            value="react"
-            v-model="coach.areas"
-          />
-          <label for="react">React</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input type="checkbox" id="vue" value="vue" v-model="coach.areas" />
-          <label for="vue">Vue</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input
-            type="checkbox"
-            id="angular"
-            value="angular"
-            v-model="coach.areas"
-          />
-          <label for="angular">Angular</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input type="checkbox" id="css" value="css" v-model="coach.areas" />
-          <label for="css">CSS</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input type="checkbox" id="html" value="html" v-model="coach.areas" />
-          <label for="html">HTML</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input
-            type="checkbox"
-            id="cloud"
-            value="cloud"
-            v-model="coach.areas"
-          />
-          <label for="cloud">Cloud</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input
-            type="checkbox"
-            id="frontend"
-            value="frontend"
-            v-model="coach.areas"
-          />
-          <label for="frontend">Frontend</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input
-            type="checkbox"
-            id="backend"
-            value="backend"
-            v-model="coach.areas"
-          />
-          <label for="backend">Backend</label>
-        </span>
-        <span class="form-control__checkbox--option">
-          <input
-            type="checkbox"
-            id="career"
-            value="career"
-            v-model="coach.areas"
-          />
-          <label for="career">Career</label>
-        </span>
+        <TagCheckbox
+          v-model="coach.tags"
+          :tag="tag"
+          class="form-control__checkbox--option"
+          @change="validate"
+          v-for="tag in tags"
+          :key="tag"
+        />
       </div>
-    </div>
+      <transition mode="out-in">
+        <ErrorIcon v-if="invalid.tags" />
+        <CheckIcon v-else />
+      </transition>
+    </fieldset>
     <div v-if="isLoading">
       <BaseSpinner />
     </div>
     <div v-else>
-      <BaseButton
-        style="marginTop: 2rem; width: 100%;"
-        :disabled="!enableButton"
-        class="register"
-        :class="enableButton ? 'valid' : 'invalid'"
-      >
+      <BaseButton style="marginTop: 2rem; width: 100%;" class="register">
         Register
       </BaseButton>
     </div>
@@ -164,21 +74,27 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import TagCheckbox from '../form/TagCheckbox.vue';
+import FormInput from '../form/FormInput.vue';
+import ErrorIcon from '../icons/ErrorIcon.vue';
+import CheckIcon from '../icons/CheckIcon.vue';
+
 export default {
+  components: { TagCheckbox, FormInput, ErrorIcon, CheckIcon },
   data() {
     return {
       invalid: {
-        firstName: false,
-        lastName: false,
-        description: false,
-        hourlyRate: false,
-        specialty: false,
-        imageUrl: false
+        firstName: true,
+        lastName: true,
+        description: true,
+        hourlyRate: true,
+        tags: true,
+        imageUrl: true
       },
       coach: {
         firstName: '',
         lastName: '',
-        areas: [],
+        tags: [],
         description: '',
         hourlyRate: null,
         imageUrl: ''
@@ -187,7 +103,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userId', 'isLoading', 'isError'])
+    ...mapGetters(['userId', 'isLoading', 'isError']),
+    ...mapGetters('coaches', ['getTags']),
+    tags() {
+      return this.getTags;
+    }
   },
   methods: {
     ...mapActions('coaches', ['registerCoach']),
@@ -198,9 +118,16 @@ export default {
         return;
       }
 
-      this.invalid[id] = value === '';
+      if (this.tags.includes(id)) {
+        this.invalid.tags = this.coach.tags.length < 1;
+        return;
+      }
+
+      return (this.invalid[id] = value === '');
     },
     async addCoach() {
+      if (Object.values(this.invalid).includes(true)) return;
+
       this.loadingStart();
       try {
         await this.registerCoach({ coach: this.coach });
@@ -211,31 +138,6 @@ export default {
         this.loadingError(error);
       }
     }
-  },
-  watch: {
-    invalid: {
-      handler: function(val) {
-        this.enableButton = !Object.values(val).includes(true);
-      },
-      deep: true
-    },
-    'coach.areas'(value) {
-      this.invalid.specialty = !value.length;
-    }
-  },
-  created() {
-    setTimeout(
-      () =>
-        (this.invalid = {
-          firstName: true,
-          lastName: true,
-          description: true,
-          hourlyRate: true,
-          specialty: true,
-          imageUrl: true
-        }),
-      300
-    );
   }
 };
 </script>
@@ -257,25 +159,6 @@ form {
     margin: 1rem 0;
     position: relative;
 
-    input,
-    textarea {
-      padding: 1rem;
-      width: 100%;
-      border-radius: $border-radius;
-      border: $border;
-      border-bottom: 2px solid green;
-    }
-
-    textarea {
-      resize: none;
-      font-family: inherit;
-    }
-
-    label {
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-
     &__checkbox {
       display: flex;
       flex-direction: column;
@@ -283,14 +166,7 @@ form {
       flex-wrap: wrap;
       justify-items: center;
       margin: 1rem 0;
-
-      label {
-        display: block;
-        line-height: 1.4rem;
-        font-size: 1.4rem;
-        font-weight: bold;
-        margin-left: 5px;
-      }
+      padding-left: 20px;
 
       &--option {
         display: flex;
@@ -300,44 +176,6 @@ form {
         }
       }
     }
-
-    input.invalid,
-    textarea.invalid {
-      border-bottom: 2px solid $color-error;
-    }
-  }
-
-  .invalid-arrow {
-    font-size: 3rem;
-    line-height: 3rem;
-    position: absolute;
-    left: -3rem;
-    color: $color-error;
-    &#invalid-checkbox {
-      top: -0.75rem;
-    }
-  }
-
-  .v-enter-active {
-    animation: errow 0.2s ease-out forwards;
-  }
-
-  .v-leave-active {
-    animation: errow 0.2s ease-out reverse;
-  }
-
-  button.invalid {
-    background-color: $color-primary-light;
-    color: white;
-    cursor: not-allowed;
-    &:hover {
-      background-color: $color-primary-light;
-    }
-  }
-
-  button.valid {
-    background-color: $color-primary-dark;
-    cursor: pointer;
   }
 }
 </style>

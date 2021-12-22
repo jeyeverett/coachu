@@ -14,7 +14,7 @@
           <h4 style="margin: 0; margin-left: 10px;">${{ hourlyRate }}/hour</h4>
         </div>
         <div class="badges">
-          <BaseBadge v-for="area in areas" :key="area">{{ area }}</BaseBadge>
+          <BaseBadge v-for="tag in areas" :key="tag">{{ tag }}</BaseBadge>
         </div>
       </article>
       <div class="actions">

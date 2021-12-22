@@ -2,32 +2,22 @@
   <section>
     <h1 style="textAlign: center; margin-bottom: 30px;">Sign-in / Sign-up</h1>
     <form @submit.prevent style="margin: 0 auto;">
-      <div class="form-control">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          v-model.trim="user.email"
-          :class="{ invalid: invalid.email }"
-          @input="validate"
-        />
-        <transition>
-          <span class="invalid-arrow" v-show="invalid.email">&#8594;</span>
-        </transition>
-      </div>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          v-model.trim="user.password"
-          :class="{ invalid: invalid.password }"
-          @input="validate"
-        />
-        <transition>
-          <span class="invalid-arrow" v-show="invalid.password">&#8594;</span>
-        </transition>
-      </div>
+      <FormInput
+        type="email"
+        id="email"
+        label="Email"
+        v-model.trim="user.email"
+        :invalid="invalid.email"
+        @input="validate"
+      />
+      <FormInput
+        type="password"
+        id="password"
+        label="Password"
+        v-model.trim="user.password"
+        :invalid="invalid.password"
+        @input="validate"
+      />
       <div v-if="isLoading">
         <BaseSpinner />
       </div>
@@ -67,12 +57,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import FormInput from '../../components/form/FormInput.vue';
 export default {
+  components: { FormInput },
   data() {
     return {
       invalid: {
-        email: false,
-        password: false
+        email: true,
+        password: true
       },
       user: {
         email: '',
@@ -122,16 +114,6 @@ export default {
       },
       deep: true
     }
-  },
-  created() {
-    setTimeout(
-      () =>
-        (this.invalid = {
-          email: true,
-          password: true
-        }),
-      300
-    );
   }
 };
 </script>
