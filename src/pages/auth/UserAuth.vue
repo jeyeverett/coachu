@@ -74,7 +74,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isLoading', 'isError'])
+    ...mapGetters(['isLoading', 'isError']),
+    ...mapGetters('coaches', ['getCoach'])
   },
   methods: {
     ...mapActions([
@@ -98,7 +99,9 @@ export default {
         this.user.email = '';
         this.user.password = '';
         this.loadingFinish();
-        this.$router.replace(redirect ? '/register' : '/coaches');
+        this.$router.replace(
+          redirect && !this.getCoach ? '/register' : '/coaches'
+        );
       } catch (error) {
         this.loadingFinish();
         this.loadingError(

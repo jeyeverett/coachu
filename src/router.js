@@ -3,6 +3,7 @@ const CoachList = () => import('./pages/coaches/CoachList');
 const CoachDetails = () => import('./pages/coaches/CoachDetails');
 const CoachContact = () => import('./pages/coaches/CoachContact');
 const CoachReg = () => import('./pages/coaches/CoachReg');
+const CoachEdit = () => import('./pages/coaches/CoachEdit');
 const MessageReceived = () => import('./pages/messages/MessageReceived');
 const UserAuth = () =>
   import(/* webpackChunkName: "user-auth" */ './pages/auth/UserAuth');
@@ -39,6 +40,13 @@ const router = createRouter({
     {
       path: '/register',
       component: CoachReg,
+      meta: {
+        auth: true
+      }
+    },
+    {
+      path: '/edit',
+      component: CoachEdit,
       meta: {
         auth: true
       }

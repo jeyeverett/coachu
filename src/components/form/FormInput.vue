@@ -3,6 +3,18 @@
     <label :for="id">{{ label }}</label>
     <input
       v-bind="$attrs"
+      v-if="!textarea"
+      :id="id"
+      :placeholder="label"
+      :class="{ invalid }"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+      :aria-describedby="invalid ? `${id}-invalid` : null"
+      :aria-invalid="invalid ? true : null"
+    />
+    <textarea
+      v-bind="$attrs"
+      v-else
       :id="id"
       :placeholder="label"
       :class="{ invalid }"
@@ -39,6 +51,10 @@ export default {
     invalid: {
       type: Boolean,
       default: true
+    },
+    textarea: {
+      type: Boolean,
+      default: false
     }
   }
 };
@@ -54,10 +70,12 @@ export default {
   input,
   textarea {
     padding: 1rem;
+    padding-right: 3.5rem;
     width: 100%;
     border-radius: 2px;
     border: $border;
     border-bottom: 2px solid $color-check;
+    margin-top: 5px;
   }
 
   input.invalid,
@@ -85,6 +103,22 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+textarea::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+textarea::-webkit-scrollbar {
+  width: 6px;
+  background-color: #f5f5f5;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 24, 27, 0.7);
+  border-radius: 1px;
 }
 
 .v-enter-active {

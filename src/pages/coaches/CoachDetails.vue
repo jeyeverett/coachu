@@ -51,7 +51,7 @@ export default {
       return this.getCoach.description;
     },
     tags() {
-      return this.getCoach.areas;
+      return this.getCoach.tags;
     },
     rate() {
       return this.getCoach.hourlyRate;

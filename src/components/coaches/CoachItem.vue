@@ -14,7 +14,7 @@
           <h4 style="margin: 0; margin-left: 10px;">${{ hourlyRate }}/hour</h4>
         </div>
         <div class="badges">
-          <BaseBadge v-for="tag in areas" :key="tag">{{ tag }}</BaseBadge>
+          <BaseBadge v-for="tag in tags" :key="tag">{{ tag }}</BaseBadge>
         </div>
       </article>
       <div class="actions">
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  props: ['firstName', 'lastName', 'id', 'hourlyRate', 'areas', 'imageUrl'],
+  props: ['firstName', 'lastName', 'id', 'hourlyRate', 'tags', 'imageUrl'],
   computed: {
     fullName() {
       return this.firstName + ' ' + this.lastName;

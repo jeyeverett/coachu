@@ -8,6 +8,9 @@ export default {
   isCoach(_, getters, _2, rootGetters) {
     return getters.getCoaches.some(coach => coach.id === rootGetters.userId);
   },
+  getCoach(_, getters, _2, rootGetters) {
+    return getters.getCoaches.find(coach => coach.id === rootGetters.userId);
+  },
   shouldFetchNew(state) {
     const { lastFetch } = state;
     if (!lastFetch) return true;

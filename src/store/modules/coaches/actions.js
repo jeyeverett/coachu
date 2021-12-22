@@ -46,5 +46,28 @@ export default {
       ...data.coach,
       id: userId
     });
+  },
+  async updateCoach(context, data) {
+    const { userId, token } = context.rootGetters;
+
+    const response = await fetch(
+      `https://coachu-71b4b-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({
+          ...data.coach,
+          updatedAt: Date.now()
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to save to database!');
+    }
+
+    context.commit('updateCoach', {
+      ...data.coach,
+      id: userId
+    });
   }
 };

@@ -23,7 +23,7 @@
   width: $icon-width;
   color: $color-check;
   position: absolute;
-  top: 22px;
+  top: 27px;
   right: 5px;
 }
 </style>

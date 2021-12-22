@@ -10,48 +10,26 @@
       <h3 v-if="sentMessage">Message Sent!</h3>
     </transition>
     <form @submit.prevent="sendNewMessage">
-      <div class="form-control">
-        <label for="email">Your e-mail</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          :class="{ invalid: invalid.email }"
-          @input="validate"
-        />
-        <transition>
-          <span
-            class="invalid-arrow"
-            id="invalid-checkbox"
-            v-show="invalid.email"
-            >&#8594;</span
-          >
-        </transition>
-      </div>
-      <div class="form-control">
-        <label for="message">Message</label>
-        <textarea
-          id="message"
-          rows="5"
-          v-model="message"
-          :class="{ invalid: invalid.message }"
-          @input="validate"
-        />
-        <transition>
-          <span
-            class="invalid-arrow"
-            id="invalid-checkbox"
-            v-show="invalid.message"
-            >&#8594;</span
-          >
-        </transition>
-      </div>
+      <FormInput
+        type="text"
+        id="email"
+        label="Your Email"
+        v-model.trim="email"
+        :invalid="invalid.email"
+        @input="validate"
+      />
+      <FormInput
+        type="text"
+        id="message"
+        label="Message"
+        v-model.trim="message"
+        :invalid="invalid.message"
+        @input="validate"
+        :textarea="true"
+      />
+
       <div>
-        <BaseButton
-          :disabled="!enableButton"
-          class="register"
-          :class="enableButton ? 'valid' : 'invalid'"
-        >
+        <BaseButton class="register">
           Send Message
         </BaseButton>
       </div>
@@ -64,18 +42,20 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import FormInput from '../../components/form/FormInput.vue';
+
 export default {
+  components: { FormInput },
   props: ['coachId'],
   data() {
     return {
       email: '',
       message: '',
       invalid: {
-        email: false,
-        message: false
+        email: true,
+        message: true
       },
-      sentMessage: false,
-      enableButton: false
+      sentMessage: false
     };
   },
 
@@ -104,7 +84,7 @@ export default {
       this.invalid[id] = value === '';
     },
     sendNewMessage() {
-      if (this.email === '' || this.message === '') return;
+      if (Object.values(this.invalid).includes(true)) return;
 
       this.sendMessage({
         coachId: this.coachId,
@@ -124,14 +104,6 @@ export default {
     }
   },
   created() {
-    setTimeout(
-      () =>
-        (this.invalid = {
-          email: true,
-          message: true
-        }),
-      300
-    );
     setTimeout(() => {
       if (!this.getCoach) {
         this.$router.push({
@@ -140,14 +112,6 @@ export default {
         });
       }
     }, 1000);
-  },
-  watch: {
-    invalid: {
-      handler: function(val) {
-        this.enableButton = !Object.values(val).includes(true);
-      },
-      deep: true
-    }
   }
 };
 </script>

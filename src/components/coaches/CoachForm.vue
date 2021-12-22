@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="addCoach">
+  <form @submit.prevent="handleCoachForm">
     <FormInput
       type="text"
       id="firstName"
@@ -28,6 +28,7 @@
       type="text"
       id="description"
       label="Description"
+      :textarea="true"
       v-model.trim="coach.description"
       :invalid="invalid.description"
       @input="validate"
@@ -66,7 +67,7 @@
     </div>
     <div v-else>
       <BaseButton style="marginTop: 2rem; width: 100%;" class="register">
-        Register
+        {{ editCoach ? 'Update' : 'Register' }}
       </BaseButton>
     </div>
   </form>
@@ -81,6 +82,21 @@ import CheckIcon from '../icons/CheckIcon.vue';
 
 export default {
   components: { TagCheckbox, FormInput, ErrorIcon, CheckIcon },
+  props: {
+    editCoach: {
+      type: Object,
+      required: false
+    }
+  },
+  created() {
+    if (this.editCoach) {
+      this.coach = { ...this.editCoach, tags: this.coach.tags };
+      Object.keys(this.coach).forEach(field => {
+        if (field === 'tags') return;
+        this.validate({ target: { id: field } });
+      });
+    }
+  },
   data() {
     return {
       invalid: {
@@ -110,7 +126,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('coaches', ['registerCoach']),
+    ...mapActions('coaches', ['registerCoach', 'updateCoach']),
     ...mapActions(['loadingStart', 'loadingFinish', 'loadingError']),
     validate({ target: { id, value } }) {
       if (id === 'hourlyRate') {
@@ -125,12 +141,16 @@ export default {
 
       return (this.invalid[id] = value === '');
     },
-    async addCoach() {
+    async handleCoachForm() {
       if (Object.values(this.invalid).includes(true)) return;
 
       this.loadingStart();
       try {
-        await this.registerCoach({ coach: this.coach });
+        if (this.editCoach) {
+          await this.updateCoach({ coach: this.coach });
+        } else {
+          await this.registerCoach({ coach: this.coach });
+        }
         this.loadingFinish();
         this.$router.replace('/coaches/' + this.userId);
       } catch (error) {

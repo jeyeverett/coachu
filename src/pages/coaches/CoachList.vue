@@ -46,6 +46,14 @@
           >
             Sign In
           </BaseButton>
+          <BaseButton
+            to="/edit"
+            :link="true"
+            v-else
+            title="Edit your coach profile"
+          >
+            Edit Profile
+          </BaseButton>
         </div>
         <transition>
           <div class="actions" v-show="showFilters">
@@ -114,7 +122,7 @@ export default {
     filteredCoaches() {
       const filtered = this.getCoaches
         .filter(coach => {
-          const { areas: tags } = coach;
+          const { tags } = coach;
           for (let tag of tags) {
             if (this.activeFilters.includes(tag)) return true;
           }
