@@ -8,7 +8,7 @@
         <li>
           <router-link to="/coaches">Coaches</router-link>
         </li>
-        <li ref="" v-if="isLoggedIn">
+        <li ref="" v-if="isLoggedIn && isCoach">
           <router-link to="/messages">Messages</router-link>
         </li>
         <li ref="" v-if="isLoggedIn">
@@ -26,7 +26,8 @@
 import { mapGetters, mapActions } from 'vuex';
 export default {
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn']),
+    ...mapGetters('coaches', ['isCoach'])
   },
   methods: {
     ...mapActions(['signOut']),

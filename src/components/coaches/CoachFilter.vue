@@ -4,7 +4,7 @@
       <h2 style="margin-bottom: 30px;">Find By Specialty</h2>
       <div class="filters">
         <TagCheckbox
-          v-for="tag in tags"
+          v-for="tag in getTags"
           v-model="activeTags"
           :tag="tag"
           @change="setFilters"
@@ -29,10 +29,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('coaches', ['getTags']),
-    tags() {
-      return this.getTags;
-    }
+    ...mapGetters('coaches', ['getTags'])
   },
   methods: {
     setFilters() {

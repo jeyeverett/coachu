@@ -33,7 +33,6 @@
       :invalid="invalid.description"
       @input="validate"
     />
-
     <FormInput
       type="number"
       id="hourlyRate"
@@ -62,14 +61,17 @@
         <CheckIcon v-else />
       </transition>
     </fieldset>
-    <div v-if="isLoading">
-      <BaseSpinner />
-    </div>
-    <div v-else>
-      <BaseButton style="marginTop: 2rem; width: 100%;" class="register">
-        {{ editCoach ? 'Update' : 'Register' }}
-      </BaseButton>
-    </div>
+
+    <transition mode="out-in">
+      <div v-if="isLoading">
+        <BaseSpinner />
+      </div>
+      <div v-else>
+        <BaseButton style="marginTop: 2rem; width: 100%;" class="register">
+          {{ editCoach ? 'Update' : 'Register' }}
+        </BaseButton>
+      </div>
+    </transition>
   </form>
 </template>
 
@@ -126,8 +128,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('coaches', ['registerCoach', 'updateCoach']),
     ...mapActions(['loadingStart', 'loadingFinish', 'loadingError']),
+    ...mapActions('coaches', ['registerCoach', 'updateCoach']),
     validate({ target: { id, value } }) {
       if (id === 'hourlyRate') {
         this.invalid[id] = value < 1;

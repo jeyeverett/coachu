@@ -120,17 +120,14 @@ export default {
     ]),
     ...mapGetters(['isLoading', 'isError', 'isLoggedIn']),
     filteredCoaches() {
-      const filtered = this.getCoaches
+      return this.getCoaches
         .filter(coach => {
-          const { tags } = coach;
-          for (let tag of tags) {
+          for (let tag of coach.tags) {
             if (this.activeFilters.includes(tag)) return true;
           }
           return false;
         })
         .slice(0, this.loadCount);
-
-      return filtered;
     },
     showRegisterButton() {
       return (

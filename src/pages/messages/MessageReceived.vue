@@ -3,20 +3,22 @@
     <header>
       <h1>Messages Page</h1>
     </header>
-    <div v-if="isLoading">
-      <BaseSpinner />
-    </div>
-    <section v-else-if="!isLoading">
-      <ul>
-        <Message
-          v-for="request in getMessages"
-          :key="request.id"
-          v-bind="request"
-        />
-      </ul>
+    <transition mode="out-in">
+      <div v-if="isLoading">
+        <BaseSpinner />
+      </div>
+      <section v-else-if="!isLoading">
+        <ul>
+          <Message
+            v-for="request in getMessages"
+            :key="request.id"
+            v-bind="request"
+          />
+        </ul>
 
-      <h3>You haven't received any messages yet.</h3>
-    </section>
+        <h3>You haven't received any messages yet.</h3>
+      </section>
+    </transition>
     <div class="error" v-if="!isLoading && isError">{{ isError }}</div>
   </section>
 </template>

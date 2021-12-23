@@ -62,7 +62,7 @@ export default {
     );
 
     if (!response.ok) {
-      throw new Error('Failed to save to database!');
+      throw new Error('Failed to update coach!');
     }
 
     context.commit('updateCoach', {
