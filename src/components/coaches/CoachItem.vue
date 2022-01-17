@@ -67,6 +67,10 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media screen and (max-width: 400px) {
+    flex-direction: column;
+  }
 }
 section {
   max-width: 75%;
@@ -75,10 +79,15 @@ section {
 .badges {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
+
+  @media screen and (max-width: 400px) {
+    margin-top: 1rem;
+  }
 }
 </style>

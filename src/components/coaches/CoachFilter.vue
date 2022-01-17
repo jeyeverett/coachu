@@ -48,6 +48,9 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 480px) {
+    align-items: flex-start;
+  }
 }
 
 label {
@@ -69,9 +72,16 @@ span {
 
 .filters {
   display: flex;
+  flex-direction: column;
+  max-height: 140px;
   justify-content: center;
   flex-wrap: wrap;
-  width: 75%;
+  width: 80%;
+  margin: 0 auto;
+
+  @media screen and (max-width: 350px) {
+    width: 90%;
+  }
 
   span {
     margin-bottom: 1rem;

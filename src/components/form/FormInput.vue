@@ -6,7 +6,10 @@
       v-if="!textarea"
       :id="id"
       :placeholder="label"
-      :class="{ invalid }"
+      :class="{
+        invalid: invalid && invalid !== null,
+        valid: !invalid && invalid !== null
+      }"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       :aria-describedby="invalid ? `${id}-invalid` : null"
@@ -17,15 +20,18 @@
       v-else
       :id="id"
       :placeholder="label"
-      :class="{ invalid }"
+      :class="{
+        invalid: invalid && invalid !== null,
+        valid: !invalid && invalid !== null
+      }"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       :aria-describedby="invalid ? `${id}-invalid` : null"
       :aria-invalid="invalid ? true : null"
     />
     <transition mode="out-in">
-      <ErrorIcon v-if="invalid" :id="`${id}-invalid`" />
-      <CheckIcon v-else />
+      <ErrorIcon v-if="invalid && invalid !== null" :id="`${id}-invalid`" />
+      <CheckIcon v-else-if="!invalid && invalid !== null" />
     </transition>
   </div>
 </template>
@@ -66,21 +72,36 @@ export default {
 .form-control {
   margin: 1rem 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+
+  /* @media screen and (max-width: 580px) {
+    width: 75%;
+  } */
 
   input,
   textarea {
     padding: 1rem;
     padding-right: 3.5rem;
-    width: 100%;
     border-radius: 2px;
     border: $border;
-    border-bottom: 2px solid $color-check;
+    border-bottom: 2px solid;
     margin-top: 5px;
+    display: flex;
+    width: 100%;
   }
 
   input.invalid,
   textarea.invalid {
     border-bottom: 2px solid $color-error;
+  }
+
+  input.valid,
+  textarea.valid {
+    border-bottom: 2px solid $color-check;
   }
 
   textarea {

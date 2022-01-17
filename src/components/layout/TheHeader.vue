@@ -44,6 +44,10 @@ export default {
 
 header {
   padding: 2rem 4rem;
+  @media screen and (max-width: 480px) {
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+  }
 }
 nav {
   display: flex;

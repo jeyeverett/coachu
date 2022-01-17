@@ -1,7 +1,7 @@
 <template>
   <section style="padding-bottom: 20px;">
     <h1>Find a CodeCoach</h1>
-    <p style="text-align: center; margin-bottom: 20px;">
+    <p style="text-align: center; width: 75%; margin: 0 auto 20px;">
       Contact a coach for free - sign in/up to register as a coach
     </p>
     <transition-group name="group-slide" tag="section" appear>
@@ -17,7 +17,7 @@
         </router-view>
       </section>
 
-      <section style="padding: 10px 0 20px 10px;" key="coaches">
+      <section key="coaches" class="coaches">
         <div class="actions">
           <BaseButton
             mode="ghost"
@@ -165,6 +165,10 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: 400px) {
+    padding: 0 0.5rem;
+  }
 }
 
 p {
@@ -183,5 +187,9 @@ p {
   justify-content: space-around;
   margin: 2rem auto;
   max-width: 100rem;
+}
+
+.coaches {
+  padding: 0 1rem;
 }
 </style>

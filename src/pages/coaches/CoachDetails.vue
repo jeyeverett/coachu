@@ -106,9 +106,16 @@ h2 {
     align-items: center;
     margin-top: 2rem;
 
+    @media screen and (max-width: 420px) {
+      flex-direction: column;
+    }
+
     h3 {
       margin: 0;
       margin-right: 2rem;
+      @media screen and (max-width: 420px) {
+        margin: 0 0 2rem 0;
+      }
     }
   }
 }

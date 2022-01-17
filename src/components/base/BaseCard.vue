@@ -20,5 +20,9 @@
   padding: 2rem;
   max-width: 80rem;
   background-color: white;
+
+  @media screen and (max-width: 400px) {
+    padding: 1rem;
+  }
 }
 </style>

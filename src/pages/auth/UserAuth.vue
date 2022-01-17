@@ -63,8 +63,8 @@ export default {
   data() {
     return {
       invalid: {
-        email: true,
-        password: true
+        email: null,
+        password: null
       },
       user: {
         email: '',
@@ -123,10 +123,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '/src/variables.scss';
-
+section {
+  padding: 0 1rem;
+}
 form {
-  width: 50%;
-  min-width: 40rem;
+  max-width: 40rem;
 
   .form-control {
     margin: 1rem 0;
@@ -137,7 +138,7 @@ form {
       width: 100%;
       border-radius: $border-radius;
       border: $border;
-      border-bottom: 2px solid green;
+      border-bottom: 2px solid;
     }
 
     label {
@@ -147,6 +148,10 @@ form {
 
     input.invalid {
       border-bottom: 2px solid $color-error;
+    }
+
+    input.valid {
+      border-bottom: 2px solid $color-check;
     }
   }
 

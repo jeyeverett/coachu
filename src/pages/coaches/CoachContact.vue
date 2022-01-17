@@ -52,8 +52,8 @@ export default {
       email: '',
       message: '',
       invalid: {
-        email: true,
-        message: true
+        email: null,
+        message: null
       },
       sentMessage: false
     };
@@ -121,7 +121,10 @@ export default {
 
 form {
   width: 70%;
-  min-width: 50rem;
+
+  @media screen and (max-width: 480px) {
+    width: 100%;
+  }
 
   .form-control {
     margin: 1rem 0;
