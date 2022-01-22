@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleCoachForm">
+  <form @submit.prevent="handleCoachForm" style="margin: 0 auto;">
     <FormInput
       type="text"
       id="firstName"
@@ -46,19 +46,18 @@
       <legend>
         Specialties
       </legend>
-      <div class="form-control__checkbox">
+      <div class="filters">
         <TagCheckbox
           v-model="coach.tags"
           :tag="tag"
-          class="form-control__checkbox--option"
           @change="validate"
           v-for="tag in tags"
           :key="tag"
         />
       </div>
       <transition mode="out-in">
-        <ErrorIcon v-if="invalid.tags" />
-        <CheckIcon v-else />
+        <ErrorIcon v-if="invalid.tags && invalid.tags !== null" />
+        <CheckIcon v-else-if="!invalid.tags && invalid.tags !== null" />
       </transition>
     </fieldset>
 
@@ -102,12 +101,12 @@ export default {
   data() {
     return {
       invalid: {
-        firstName: true,
-        lastName: true,
-        description: true,
-        hourlyRate: true,
-        tags: true,
-        imageUrl: true
+        firstName: null,
+        lastName: null,
+        description: null,
+        hourlyRate: null,
+        tags: null,
+        imageUrl: null
       },
       coach: {
         firstName: '',
@@ -130,9 +129,27 @@ export default {
   methods: {
     ...mapActions(['loadingStart', 'loadingFinish', 'loadingError']),
     ...mapActions('coaches', ['registerCoach', 'updateCoach']),
-    validate({ target: { id, value } }) {
+    async validate({ target: { id, value } }) {
+      console.log('debounce');
+
       if (id === 'hourlyRate') {
         this.invalid[id] = value < 1;
+        return;
+      }
+
+      if (id === 'firstName' || id === 'lastName') {
+        this.invalid[id] = value.length < 2;
+        return;
+      }
+
+      if (id === 'description') {
+        this.invalid[id] = value.length < 25;
+        return;
+      }
+
+      if (id === 'imageUrl') {
+        this.invalid[id] =
+          value.length > 10 ? await this.isValidUrl(value) : false;
         return;
       }
 
@@ -140,8 +157,6 @@ export default {
         this.invalid.tags = this.coach.tags.length < 1;
         return;
       }
-
-      return (this.invalid[id] = value === '');
     },
     async handleCoachForm() {
       if (Object.values(this.invalid).includes(true)) return;
@@ -159,6 +174,16 @@ export default {
         this.loadingFinish();
         this.loadingError(error);
       }
+    },
+    async isValidUrl(url) {
+      console.log('here');
+      try {
+        const res = await fetch(url);
+        const buff = await res.blob();
+        return buff.type.startsWith('image/');
+      } catch (err) {
+        return false;
+      }
     }
   }
 };
@@ -174,29 +199,27 @@ section {
 }
 
 form {
-  width: 50%;
-  min-width: 40rem;
+  max-width: 40rem;
 
   .form-control {
     margin: 1rem 0;
     position: relative;
+  }
+  .filters {
+    display: flex;
+    flex-direction: column;
+    max-height: 140px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 80%;
+    margin: 0 auto;
 
-    &__checkbox {
-      display: flex;
-      flex-direction: column;
-      max-height: 8rem;
-      flex-wrap: wrap;
-      justify-items: center;
-      margin: 1rem 0;
-      padding-left: 20px;
+    @media screen and (max-width: 350px) {
+      width: 90%;
+    }
 
-      &--option {
-        display: flex;
-        align-items: center;
-        &:not(:last-child) {
-          margin-bottom: 1rem;
-        }
-      }
+    span {
+      margin-bottom: 1rem;
     }
   }
 }

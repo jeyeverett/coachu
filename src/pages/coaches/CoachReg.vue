@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1 style="margin-bottom: 30px;">Coach Registration</h1>
-    <CoachForm style="margin: 0 auto;" />
+    <CoachForm />
   </section>
 </template>
 
@@ -17,5 +17,9 @@ export default {
 <style lang="scss" scoped>
 h1 {
   text-align: center;
+}
+
+section {
+  padding: 0 1rem;
 }
 </style>

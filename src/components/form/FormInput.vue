@@ -74,7 +74,6 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-items: center;
   align-items: center;
   width: 100%;
 
@@ -112,6 +111,8 @@ export default {
   label {
     font-size: 1.4rem;
     font-weight: bold;
+    text-align: left;
+    width: 100%;
   }
 }
 
